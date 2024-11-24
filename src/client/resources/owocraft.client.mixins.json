@@ -1,11 +1,15 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "dev.sebastianb.owocraft.mixin.client",
+  "package": "dev.sebastianb.owocraft.client.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "TitleScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "MinecraftMixin"
+  ]
 }

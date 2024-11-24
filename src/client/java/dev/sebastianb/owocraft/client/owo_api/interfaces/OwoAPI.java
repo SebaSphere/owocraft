@@ -2,6 +2,7 @@ package dev.sebastianb.owocraft.client.owo_api.interfaces;
 
 import dev.sebastianb.owocraft.client.owo_api.interfaces.bindings.PanamaBindingManager;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.bindings.PythonRunnerManager;
+import dev.sebastianb.owocraft.client.owo_api.interfaces.owo.ConnectionStateManager;
 
 public class OwoAPI {
 
@@ -10,6 +11,7 @@ public class OwoAPI {
     public interface API {
         PanamaBindingManager getPanamaBindingManager();
         PythonRunnerManager getPythonRunnerManager();
+        ConnectionStateManager getConnectionStateManager();
     }
 
     public static API api() {

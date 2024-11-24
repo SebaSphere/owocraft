@@ -2,12 +2,23 @@ package dev.sebastianb.owocraft.client;
 
 import dev.sebastianb.owocraft.client.owo_api.impl.OwoAPIImpl;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.OwoAPI;
+import dev.sebastianb.owocraft.client.owo_api.interfaces.bindings.PanamaBindingManager;
+import dev.sebastianb.owocraft.client.owo_api.interfaces.owo.ConnectionStateManager;
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.world.level.Level;
 
 public class OwocraftClient implements ClientModInitializer {
 
-    public static OwoAPI.API API;
+    private static OwoAPI.API API;
+    private static PanamaBindingManager panamaBindingManager;
+    private static ConnectionStateManager connectionStateManager;
+
+    public static PanamaBindingManager getPanamaBindingManager() {
+        return panamaBindingManager;
+    }
+
+    public static ConnectionStateManager getConnectionStateManager() {
+        return connectionStateManager;
+    }
 
     @Override
     public void onInitializeClient() {
@@ -15,14 +26,13 @@ public class OwocraftClient implements ClientModInitializer {
         OwoAPI._init(OwoAPI.api());
         API = OwoAPIImpl.INSTANCE;
 
-        var panama = API.getPanamaBindingManager();
-        panama.loadDLL();
-        panama.testHelloBinding();
-        for (int i = 0; i < 4; i++) {
-            System.out.println("PANAMA");
+        // load all states
+        panamaBindingManager = API.getPanamaBindingManager();
+        connectionStateManager = API.getConnectionStateManager();
 
-        }
-
+        panamaBindingManager.loadDLL();
+        System.out.println(connectionStateManager.getState());
+        panamaBindingManager.runEmptyVoidMethod("startOwoSearch");
 
 
     }
