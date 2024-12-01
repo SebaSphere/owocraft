@@ -2,10 +2,14 @@ package dev.sebastianb.owocraft.client.owo_api.impl.bindings;
 
 import dev.sebastianb.owocraft.Owocraft;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.bindings.PanamaBindingManager;
+import jdk.jfr.MemoryAddress;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodType;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.logging.Level;
 
@@ -47,6 +51,38 @@ public enum PanamaBindingManagerImpl implements PanamaBindingManager {
                                 .downcallHandle(symbolSeg, FunctionDescriptor.of(ValueLayout.JAVA_LONG)))
                         .orElseThrow();
                 return (long) methodHandle.invokeExact();
+            } else {
+                throw new RuntimeException("Method " + methodName + " not found");
+            }
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean getBooleanStateInvokeOnePassedStringMethod(String methodName, String passedString) {
+        try {
+            Optional<MemorySegment> memSeg = loaderLookup.find(methodName);
+            if (memSeg.isPresent()) {
+                // Get byte array representation of the string
+                byte[] stringBytes = passedString.getBytes(StandardCharsets.UTF_8);
+                ByteBuffer byteBuffer = ByteBuffer.allocateDirect(stringBytes.length + 1);
+                byteBuffer.put(stringBytes);
+
+                // Null terminate the string (C-style)
+                byteBuffer.put((byte)0);
+                byteBuffer.flip();
+
+                MemorySegment segment = MemorySegment.ofBuffer(byteBuffer);
+
+                MethodHandle methodHandle = memSeg.or(() -> stdlibLookup.find(methodName))
+                        .map(symbolSeg -> nativeLinker
+                                .downcallHandle(symbolSeg,
+                                        FunctionDescriptor.of(ValueLayout.JAVA_BOOLEAN,
+                                                ValueLayout.ADDRESS)))
+                        .orElseThrow();
+                // Pass a pointer to the C string
+                return (boolean) methodHandle.invokeExact(segment);
             } else {
                 throw new RuntimeException("Method " + methodName + " not found");
             }
