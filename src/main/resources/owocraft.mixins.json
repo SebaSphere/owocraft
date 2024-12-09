@@ -4,7 +4,8 @@
   "package": "dev.sebastianb.owocraft.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "LevelMixin"
+    "LevelMixin",
+    "PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

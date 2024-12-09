@@ -15,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Arrays;
+
 @Mixin(LocalPlayer.class)
 public abstract class ClientPlayerMixin extends AbstractClientPlayer {
 
@@ -24,46 +26,36 @@ public abstract class ClientPlayerMixin extends AbstractClientPlayer {
 
 
     @Unique
-    boolean hasFallen = false;
-    @Unique
-    int fallTicks = 10 * 3;
-    @Unique
-    int MAX_FALL_TICKS = 10 * 3;
+    private long lastNonGenericTick = -10;
 
     @Inject(method = "tick()V", at = @At("HEAD"), cancellable = true)
     private void onTick(CallbackInfo ci) {
-
-        if (tickCount % 2 == 0) {
-
-            // Check fall state and handle it
-            if (hasFallen) {
-                fallTicks--;
-                System.out.println(OwocraftClient.getConnectionStateManager().getState());
-                System.out.println(fallTicks + " " + MAX_FALL_TICKS);
-
-                double percentage = ((double) fallTicks / MAX_FALL_TICKS) * 50;
-                String intensity = String.valueOf(percentage);
-
-                boolean sensationRan = OwocraftClient.getSensationManager()
-                        .runSensation("100,0.1," + intensity  + ",0,0,0,Impact");
-                System.out.println(intensity);
-                if (fallTicks == 0) { // timer completes
-                    hasFallen = false; // reset falling state
-                    fallTicks = MAX_FALL_TICKS; // reset timer
-                }
-            }
-        }
+        lastNonGenericTick++;
     }
 
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     private void onHurt(DamageSource damageSource, float f, CallbackInfoReturnable<Boolean> cir) {
-        if (damageSource == damageSources().fall()) {
-            System.out.println("AUCH");
-            hasFallen = true;
-            fallTicks = MAX_FALL_TICKS; // reset timer
+
+        // System.out.println(damageSource.getMsgId());
+        var damageSourceNamespaceToKey = damageSource.typeHolder().getRegisteredName().split(":");
+
+        // System.out.println(Arrays.toString(damageSourceNamespaceToKey));
+        String modID = damageSourceNamespaceToKey[0];
+        String key = damageSourceNamespaceToKey[1];
+
+        if ("generic".equals(key) && lastNonGenericTick <= 20) {
+            return;
         }
 
+        if (!"generic".equals(key)) {
+            // Capture the latest non-generic event tick
+            lastNonGenericTick = 0;
+        }
+        OwocraftClient.getPythonRunnerManager().runPythonScript(modID, key);
+
     }
+
+    // TODO: on death, stop all events
 
 
 
