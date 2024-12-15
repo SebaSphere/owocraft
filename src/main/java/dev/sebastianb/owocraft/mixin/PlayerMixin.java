@@ -25,7 +25,7 @@ public abstract class PlayerMixin extends LivingEntity {
         if (!level().isClientSide) {
             var damageSourceNamespaceToKey = damageSource.typeHolder().getRegisteredName().split(":");
 
-            System.out.println(Arrays.toString(damageSourceNamespaceToKey));
+            // System.out.println(Arrays.toString(damageSourceNamespaceToKey));
         }
     }
 

@@ -1,13 +1,13 @@
 package dev.sebastianb.owocraft.client.facade;
 
+import net.minecraft.client.Minecraft;
+
 public class MinecraftFacade {
 
     public MinecraftFacade() {}
 
-    public void say(String msg) {
-
-
-
+    public long getSystemTime() {
+        return System.currentTimeMillis();
     }
 
 }

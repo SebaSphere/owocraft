@@ -9,8 +9,8 @@ public enum SensationManagerImpl implements SensationManager {
     INSTANCE;
 
     @Override
-    public boolean runSensation(String sensationFromParsedString) {
+    public boolean runSensation(String sensationFromParsedString, String muscleFromParsedString) {
         return OwocraftClient.getPanamaBindingManager()
-                .getBooleanStateInvokeOnePassedStringMethod("runParsedSensationEvent", sensationFromParsedString);
+                .getBooleanStateInvokeMultiplePassedStringMethod("runParsedSensationEvent", sensationFromParsedString, muscleFromParsedString);
     }
 }

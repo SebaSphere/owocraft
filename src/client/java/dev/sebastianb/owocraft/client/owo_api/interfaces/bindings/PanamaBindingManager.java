@@ -6,7 +6,7 @@ public interface PanamaBindingManager {
 
     long getLongStateInvokeVoidMethod(String methodName);
 
-    boolean getBooleanStateInvokeOnePassedStringMethod(String methodName, String passedString);
+    boolean getBooleanStateInvokeMultiplePassedStringMethod(String methodName, String... passedString);
 
     void loadDLL();
 

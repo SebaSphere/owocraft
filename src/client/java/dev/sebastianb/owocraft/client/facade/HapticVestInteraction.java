@@ -12,7 +12,7 @@ public class HapticVestInteraction implements SensationManager {
     }
 
     @Override
-    public boolean runSensation(String sensationFromParsedString) {
-        return OwocraftClient.getSensationManager().runSensation(sensationFromParsedString);
+    public boolean runSensation(String sensationFromParsedString, String muscleFromParsedString) {
+        return OwocraftClient.getSensationManager().runSensation(sensationFromParsedString, muscleFromParsedString);
     }
 }

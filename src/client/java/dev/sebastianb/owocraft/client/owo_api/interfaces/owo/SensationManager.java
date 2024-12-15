@@ -1,5 +1,5 @@
 package dev.sebastianb.owocraft.client.owo_api.interfaces.owo;
 
 public interface SensationManager {
-    boolean runSensation(String sensationFromParsedString);
+    boolean runSensation(String sensationFromParsedString, String muscleFromParsedString);
 }

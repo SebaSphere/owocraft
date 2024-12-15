@@ -51,7 +51,7 @@ public abstract class ClientPlayerMixin extends AbstractClientPlayer {
             // Capture the latest non-generic event tick
             lastNonGenericTick = 0;
         }
-        OwocraftClient.getPythonRunnerManager().runPythonScript(modID, key);
+        OwocraftClient.getPythonRunnerManager().runPythonScript(modID, key, f);
 
     }
 

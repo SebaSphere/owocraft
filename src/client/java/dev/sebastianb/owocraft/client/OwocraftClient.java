@@ -56,7 +56,7 @@ public class OwocraftClient implements ClientModInitializer {
         System.out.println(connectionStateManager.getState());
         panamaBindingManager.runEmptyVoidMethod("startOwoSearch");
 
-        pythonRunnerManager.initPythonScriptPath("minecraft", "test-script.py", "test");
+        pythonRunnerManager.initPythonScriptPath("minecraft", "test-script.py", "test", 1);
 
 
         // Use damageTypes interface's class object
@@ -74,7 +74,10 @@ public class OwocraftClient implements ClientModInitializer {
                 pythonRunnerManager.initPythonScriptPath(
                         resourceKey.location().getNamespace(), // mod id
                         "damage-" + resourceKey.location().getPath() + "-script.py", // python path
-                        resourceKey.location().getPath()); // event name
+                        resourceKey.location().getPath(), // event name
+                        (int) resourceKey.location().getPath().toCharArray()[0] // priority based off first letter
+                        // TODO: make priority based off config
+                );
 
             } catch (IllegalAccessException e) {
                 e.printStackTrace();

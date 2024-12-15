@@ -4,13 +4,14 @@ import dev.sebastianb.owocraft.Owocraft;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.bindings.PanamaBindingManager;
 import jdk.jfr.MemoryAddress;
 import net.fabricmc.loader.api.FabricLoader;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodType;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
 
 public enum PanamaBindingManagerImpl implements PanamaBindingManager {
@@ -60,35 +61,49 @@ public enum PanamaBindingManagerImpl implements PanamaBindingManager {
     }
 
     @Override
-    public boolean getBooleanStateInvokeOnePassedStringMethod(String methodName, String passedString) {
+    public boolean getBooleanStateInvokeMultiplePassedStringMethod(String methodName, String... passedStrings) {
         try {
             Optional<MemorySegment> memSeg = loaderLookup.find(methodName);
             if (memSeg.isPresent()) {
-                // Get byte array representation of the string
-                byte[] stringBytes = passedString.getBytes(StandardCharsets.UTF_8);
-                ByteBuffer byteBuffer = ByteBuffer.allocateDirect(stringBytes.length + 1);
-                byteBuffer.put(stringBytes);
-
-                // Null terminate the string (C-style)
-                byteBuffer.put((byte)0);
-                byteBuffer.flip();
-
-                MemorySegment segment = MemorySegment.ofBuffer(byteBuffer);
-
                 MethodHandle methodHandle = memSeg.or(() -> stdlibLookup.find(methodName))
                         .map(symbolSeg -> nativeLinker
                                 .downcallHandle(symbolSeg,
                                         FunctionDescriptor.of(ValueLayout.JAVA_BOOLEAN,
-                                                ValueLayout.ADDRESS)))
+                                                Arrays.stream(passedStrings)
+                                                .map(s -> ValueLayout.ADDRESS)
+                                                .toArray(ValueLayout[]::new)
+                                        )
+                                )
+                        )
                         .orElseThrow();
-                // Pass a pointer to the C string
-                return (boolean) methodHandle.invokeExact(segment);
+                // Pass pointers to the C strings
+                ArrayList<MemorySegment> segments = new ArrayList<>();
+
+                for (int i = 0; i < passedStrings.length; i++) {
+                    segments.add(getMemorySegmentFromString(passedStrings, i));
+                }
+
+                return (boolean) methodHandle
+                        .invokeWithArguments(segments.toArray(MemorySegment[]::new));
             } else {
                 throw new RuntimeException("Method " + methodName + " not found");
             }
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static @NotNull MemorySegment getMemorySegmentFromString(String[] passedStrings, int x) {
+        byte[] stringBytes1 = passedStrings[x].getBytes(StandardCharsets.UTF_8);
+        ByteBuffer byteBuffer1 = ByteBuffer.allocateDirect(stringBytes1.length + 1);
+        byteBuffer1.put(stringBytes1);
+
+        // Null terminate the first string (C-style)
+        byteBuffer1.put((byte) 0);
+        byteBuffer1.flip();
+
+        MemorySegment segment1 = MemorySegment.ofBuffer(byteBuffer1);
+        return segment1;
     }
 
     @Override
