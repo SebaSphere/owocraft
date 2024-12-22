@@ -18,11 +18,7 @@
     ]
   },
   "mixins": [
-    "owocraft.mixins.json",
-    {
-      "config": "owocraft.client.mixins.json",
-      "environment": "client"
-    }
+    "owocraft.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",

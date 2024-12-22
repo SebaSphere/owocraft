@@ -1,7 +1,5 @@
-package dev.sebastianb.owocraft.client.mixin;
+package dev.sebastianb.owocraft.mixin.client;
 
-import dev.sebastianb.owocraft.client.OwocraftClient;
-import dev.sebastianb.owocraft.client.owo_api.interfaces.owo.ConnectionStateManager;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

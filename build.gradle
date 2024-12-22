@@ -16,12 +16,18 @@ base {
 }
 
 loom {
-    splitEnvironmentSourceSets()
-
-    mods {
-        "owocraft" {
-            sourceSet sourceSets.main
-            sourceSet sourceSets.client
+    runs {
+        client {
+            client()
+            setConfigName('Fabric Client')
+            ideConfigGenerated(true)
+            runDir('runs/client')
+        }
+        server {
+            server()
+            setConfigName('Fabric Server')
+            ideConfigGenerated(true)
+            runDir('runs/server')
         }
     }
 }
@@ -31,6 +37,12 @@ repositories {
     maven {
         url "https://repo1.maven.org/maven2"
         name "jython"
+    }
+    maven {
+        url "https://maven2.bai.lol"
+        content {
+            includeGroup "lol.bai"
+        }
     }
 }
 
@@ -52,6 +64,10 @@ dependencies {
 
     implementation "org.python:jython-standalone:${project.jython_version}"
     include "org.python:jython-standalone:${project.jython_version}"
+
+    include "lol.bai:badpackets:fabric-${badpackets_version}"
+    modImplementation "lol.bai:badpackets:fabric-${badpackets_version}"
+
 
 }
 

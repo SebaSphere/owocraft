@@ -9,5 +9,10 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "client.ClientPlayerMixin",
+    "client.MinecraftMixin",
+    "client.TitleScreenMixin"
+  ]
 }
