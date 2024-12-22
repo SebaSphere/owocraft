@@ -1,5 +1,6 @@
 package dev.sebastianb.owocraft.client;
 
+import dev.sebastianb.owocraft.OwocraftConfig;
 import dev.sebastianb.owocraft.client.owo_api.impl.OwoAPIImpl;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.OwoAPI;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.bindings.PanamaBindingManager;
@@ -83,6 +84,9 @@ public class OwocraftClient implements ClientModInitializer {
                 e.printStackTrace();
             }
         }
+
+        OwocraftConfig.reload();
+
 
     }
 }

@@ -1,4 +1,4 @@
-package dev.sebastianb.owocraft.client.owo_api.impl.bindings;
+package dev.sebastianb.owocraft.client.owo_api.impl.bindings.python;
 
 import dev.sebastianb.owocraft.Owocraft;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.bindings.PythonRunnerManager;
@@ -8,33 +8,43 @@ import org.python.core.PyException;
 import org.python.util.PythonInterpreter;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
 public enum PythonRunnerManagerImpl implements PythonRunnerManager {
     INSTANCE;
 
-    class PythonScriptInformation {
-        public final String script;
-        public final int priority;
-
-        public PythonScriptInformation(String script, String eventName, int priority) {
-            this.script = script;
-            this.priority = priority;
-        }
-    }
-
-    private final Map<String, PythonScriptInformation> allLoadedScripts = new HashMap<>();
+    // TODO: make this just seperated into this class only
+    public HashMap<String, PythonScriptInformation> allLoadedScripts = new HashMap<>();
 
     private static final PythonInterpreter INTERPRETER = new PythonInterpreter();
 
     private final String pythonScriptPath = FabricLoader.getInstance().getConfigDir().resolve("owocraft/python/").toString();
+
+    @Override
+    public HashMap<String, PythonScriptInformation> getPythonScripts() {
+        return allLoadedScripts;
+    }
+
+    @Override
+    public void reloadWithScript(HashMap<String, PythonScriptInformation> pythonScriptInformationHashMap) {
+
+
+        pythonScriptInformationHashMap.entrySet().forEach(entry -> {
+            String key = entry.getKey();
+            PythonScriptInformation value = entry.getValue();
+            allLoadedScripts.compute(key, (k, v) -> v == null ? value : v);
+        });
+
+
+        allRunningScripts.values().forEach(Thread::interrupt);
+        allRunningScripts.clear();
+    }
 
     @Override
     public boolean initPythonScriptPath(String modID, String scriptName, String eventName, int priority) {
@@ -81,13 +91,18 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
     // this is kinda bad but it works
     int prevEventPriority = 0;
 
+
+    // TODO: see why it barely pops up for a second
     @Override
     public void runPythonScript(String modID, String event, Object... args) {
         PythonScriptInformation scriptInfo = allLoadedScripts.get(modID + ":" + event);
 
         if (event != null && !allRunningScripts.containsKey(event) && allRunningScripts.isEmpty()) {
+
             prevEventPriority = scriptInfo.priority; // sets priority when this is supposed to fire
 
+            System.out.println("RUNNING SCRIPT FOR EVENT: " + event);
+            System.out.println(scriptInfo);
             runPythonCodeFromEvent(event, args, scriptInfo);
 
         } else if (event == null) {
@@ -106,8 +121,10 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
     private void runPythonCodeFromEvent(String event, Object[] args, PythonScriptInformation scriptInfo) {
         var pyScript = new Thread(() -> {
             try {
+                int i = 1;
                 for (Object arg : args) {
-                    INTERPRETER.set(arg.toString(), arg);
+                    INTERPRETER.set("variable" + i, arg);
+                    i++;
                 }
                 INTERPRETER.exec(scriptInfo.script);
 

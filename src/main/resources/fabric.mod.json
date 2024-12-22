@@ -15,6 +15,9 @@
     ],
     "main": [
       "dev.sebastianb.owocraft.Owocraft"
+    ],
+    "modmenu": [
+      "dev.sebastianb.owocraft.integration.ModMenuIntegration"
     ]
   },
   "mixins": [
