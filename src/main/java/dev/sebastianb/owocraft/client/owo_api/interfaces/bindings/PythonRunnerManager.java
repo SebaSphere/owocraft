@@ -1,5 +1,6 @@
 package dev.sebastianb.owocraft.client.owo_api.interfaces.bindings;
 
+import dev.sebastianb.owocraft.client.owo_api.impl.bindings.python.PairedVariableArgument;
 import dev.sebastianb.owocraft.client.owo_api.impl.bindings.python.PythonScriptInformation;
 
 import java.util.ArrayList;
@@ -18,6 +19,6 @@ public interface PythonRunnerManager {
 
     void stopPythonScript(String eventName);
 
-    void runPythonScript(String modID, String eventName, Object... args);
+    void runPythonScript(String modID, String eventName, PairedVariableArgument... args);
 
 }

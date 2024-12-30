@@ -2,6 +2,7 @@ package dev.sebastianb.owocraft.networking.common.s2c;
 
 import dev.sebastianb.owocraft.Owocraft;
 import dev.sebastianb.owocraft.client.OwocraftClient;
+import dev.sebastianb.owocraft.client.owo_api.impl.bindings.python.PairedVariableArgument;
 import dev.sebastianb.owocraft.networking.common.IPacket;
 import io.netty.buffer.Unpooled;
 import lol.bai.badpackets.api.PacketReceiver;
@@ -44,7 +45,10 @@ public class PythonEventActivationS2CPacket implements IPacket {
         String key = damageSourceNamespaceToKey[1];
 
         client.execute(() -> {
-            OwocraftClient.getPythonRunnerManager().runPythonScript(modID, key, damage, damageEntity);
+            OwocraftClient.getPythonRunnerManager().runPythonScript(modID, key,
+                    new PairedVariableArgument("damage", damage),
+                    new PairedVariableArgument("damageFromEntityType", damageEntity)
+            );
         });
 
     }

@@ -111,7 +111,7 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
 
     // TODO: see why it barely pops up for a second
     @Override
-    public void runPythonScript(String modID, String event, Object... args) {
+    public void runPythonScript(String modID, String event, PairedVariableArgument... args) {
         PythonScriptInformation scriptInfo = allLoadedScripts.get(modID + ":" + event);
 
         if (event != null && !allRunningScripts.containsKey(event) && allRunningScripts.isEmpty()) {
@@ -139,14 +139,12 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
         }
     }
 
-    private void runPythonCodeFromEvent(String event, Object[] args, PythonScriptInformation scriptInfo) {
+    private void runPythonCodeFromEvent(String event, PairedVariableArgument[] args, PythonScriptInformation scriptInfo) {
         var pyScript = new Thread(() -> {
             try {
-                int i = 1;
-                for (Object arg : args) {
+                for (PairedVariableArgument arg : args) {
                     // TODO: pass proper arg variable name
-                    INTERPRETER.set("variable" + i, arg);
-                    i++;
+                    INTERPRETER.set(arg.variableName(), arg.object());
                 }
                 // FIXME: I could make it call a new interpreter but the issue is sensations start flickering
                 // TODO: make it so it can run multiple scripts at once
