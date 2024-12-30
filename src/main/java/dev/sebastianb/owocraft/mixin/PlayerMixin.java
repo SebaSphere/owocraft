@@ -30,8 +30,7 @@ public abstract class PlayerMixin extends Player {
 
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     private void onHurt(DamageSource damageSource, float f, CallbackInfoReturnable<Boolean> cir) {
-        // TODO: on death, stop all events
-        if (!level().isClientSide) {
+        if (!level().isClientSide && !isDeadOrDying()) {
             PythonEventActivationS2CPacket.sendPacketToServer(damageSource, (ServerPlayer) (Object) this, f);
         }
     }

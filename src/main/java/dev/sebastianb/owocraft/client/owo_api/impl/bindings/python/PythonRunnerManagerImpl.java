@@ -8,6 +8,7 @@ import org.python.core.PyException;
 import org.python.util.PythonInterpreter;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,12 +35,27 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
     @Override
     public void reloadWithScript(HashMap<String, PythonScriptInformation> pythonScriptInformationHashMap) {
 
+        // so I want to take the python script and replace all null values inside pythonScriptInformationHashMap with what's already in allLoadedScripts
 
-        pythonScriptInformationHashMap.entrySet().forEach(entry -> {
-            String key = entry.getKey();
-            PythonScriptInformation value = entry.getValue();
-            allLoadedScripts.compute(key, (k, v) -> v == null ? value : v);
+        pythonScriptInformationHashMap.forEach((key, value) -> {
+
+            for (Field field : PythonScriptInformation.class.getDeclaredFields()) {
+                field.setAccessible(true);
+                try {
+                    if (field.get(value) == null) {
+                        PythonScriptInformation existingScriptInfo = allLoadedScripts.get(key);
+                        if (existingScriptInfo != null) {
+                            field.set(value, field.get(existingScriptInfo));
+                        }
+                    }
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException("Error replacing null values...", e);
+                }
+            }
+
         });
+
+        allLoadedScripts = pythonScriptInformationHashMap;
 
 
         allRunningScripts.values().forEach(Thread::interrupt);
@@ -108,8 +124,7 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
         } else if (event == null) {
             Owocraft.getLogger().log(Level.WARNING, "Python script for event " + event + " is not initialized!");
         } else { // allRunningScripts.isEmpty()
-            // when the existing event is higher, this should run
-            if (scriptInfo.priority > prevEventPriority) {
+            if (scriptInfo.priority >= prevEventPriority && !scriptInfo.shouldFinishEventFirst) {
                 allRunningScripts.values().forEach(Thread::interrupt);
                 allRunningScripts.clear();
                 System.out.println("HAS A HIGHER PRIORITY, STOPPED ALL THREADS");
@@ -123,6 +138,7 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
             try {
                 int i = 1;
                 for (Object arg : args) {
+                    // TODO: pass proper arg variable name
                     INTERPRETER.set("variable" + i, arg);
                     i++;
                 }

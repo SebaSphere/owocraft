@@ -1,21 +1,19 @@
 package dev.sebastianb.owocraft.client;
 
-import dev.sebastianb.owocraft.OwocraftConfig;
+import dev.sebastianb.owocraft.config.OwocraftConfig;
 import dev.sebastianb.owocraft.client.owo_api.impl.OwoAPIImpl;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.OwoAPI;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.bindings.PanamaBindingManager;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.bindings.PythonRunnerManager;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.owo.ConnectionStateManager;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.owo.SensationManager;
+import dev.sebastianb.owocraft.config.OwocraftDefaultScriptsLoader;
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 public class OwocraftClient implements ClientModInitializer {
 
@@ -43,6 +41,9 @@ public class OwocraftClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        // move scripts that should have default configs to config folder
+        OwocraftDefaultScriptsLoader.register();
+
         // init owo api on client start as it only exists there
         OwoAPI._init(OwoAPI.api());
         API = OwoAPIImpl.INSTANCE;
@@ -76,8 +77,7 @@ public class OwocraftClient implements ClientModInitializer {
                         resourceKey.location().getNamespace(), // mod id
                         "damage-" + resourceKey.location().getPath() + "-script.py", // python path
                         resourceKey.location().getPath(), // event name
-                        (int) resourceKey.location().getPath().toCharArray()[0] // priority based off first letter
-                        // TODO: make priority based off config
+                        (int) resourceKey.location().getPath().toCharArray()[0] // priority based off first letter, just for default config
                 );
 
             } catch (IllegalAccessException e) {
@@ -86,7 +86,6 @@ public class OwocraftClient implements ClientModInitializer {
         }
 
         OwocraftConfig.reload();
-
 
     }
 }

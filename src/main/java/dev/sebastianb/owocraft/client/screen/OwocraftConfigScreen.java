@@ -4,8 +4,9 @@ import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionGroup;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
+import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
-import dev.sebastianb.owocraft.OwocraftConfig;
+import dev.sebastianb.owocraft.config.OwocraftConfig;
 import dev.sebastianb.owocraft.client.OwocraftClient;
 import dev.sebastianb.owocraft.client.owo_api.impl.bindings.python.PythonScriptInformation;
 import net.minecraft.client.gui.screens.Screen;
@@ -17,6 +18,9 @@ public class OwocraftConfigScreen {
 
 
     public static Screen createScreen(Screen parent) {
+        OwocraftConfig.reload();
+        System.out.println("EEEE");
+
         var builder = YetAnotherConfigLib.createBuilder()
                 .title(Component.literal("Owocraft Config")); // TODO: translatable
 
@@ -71,6 +75,26 @@ public class OwocraftConfigScreen {
                                 .range(0, 1000)
                                 .formatValue(value -> Component.literal(String.valueOf(value)))
                         )
+                        .build())
+                .option(Option.<Boolean>createBuilder()
+                        .name(Component.literal("Should finish event"))
+                        .binding(
+                                OwocraftConfig.HANDLER.instance().pythonConfigInformation.values().stream()
+                                        .filter(info -> info.eventName.equals(scriptInformation.eventName))
+                                        .findFirst().get().shouldFinishEventFirst,
+
+                                () -> OwocraftConfig.HANDLER.instance().pythonConfigInformation.values().stream()
+                                        .filter(info -> info.eventName.equals(scriptInformation.eventName))
+                                        .findFirst().get().shouldFinishEventFirst, // getter
+
+                                val -> {
+                                    OwocraftConfig.HANDLER.instance().pythonConfigInformation.values().stream()
+                                            .filter(info -> info.eventName.equals(scriptInformation.eventName))
+                                            .findFirst().get().shouldFinishEventFirst
+                                            = val;
+                                } // setter
+                        )
+                        .controller(booleanOption -> BooleanControllerBuilder.create(booleanOption).trueFalseFormatter())
                         .build());
     }
 

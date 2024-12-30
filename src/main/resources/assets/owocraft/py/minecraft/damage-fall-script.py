@@ -1,8 +1,11 @@
 import time
 from dev.sebastianb.owocraft.client.facade import HapticVestInteraction
 
-# Initialize haptic interaction
+
+
 hapticVestInteraction = HapticVestInteraction()
+
+print("Fallen")
 
 canRun = True
 intensity = 100

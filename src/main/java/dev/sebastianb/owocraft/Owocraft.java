@@ -24,6 +24,5 @@ public class Owocraft implements ModInitializer {
 
         OCPackets.register();
 
-
     }
 }

@@ -9,6 +9,12 @@ public class PythonScriptInformation {
     public int priority;
     public transient final String eventName;
 
+    @SerialEntry
+    public boolean shouldFinishEventFirst = true;
+
+    @SerialEntry
+    public boolean runGenericEventInstead = false;
+
 
     public PythonScriptInformation(String script, String eventName, int priority) {
         this.script = script;
@@ -17,16 +23,17 @@ public class PythonScriptInformation {
     }
 
     @Override
-    public int hashCode() {
-        return eventName.hashCode();
+    public String toString() {
+        return "PythonScriptInformation{" +
+                ", priority=" + priority +
+                ", eventName='" + eventName + '\'' +
+                ", shouldFinishEventFirst=" + shouldFinishEventFirst +
+                ", runGenericEventInstead=" + runGenericEventInstead +
+                "}\n";
     }
 
     @Override
-    public String toString() {
-        return "PythonScriptInformation{" +
-                "script='" + script + '\'' +
-                ", priority=" + priority +
-                ", eventName='" + eventName + '\'' +
-                '}';
+    public int hashCode() {
+        return eventName.hashCode();
     }
 }

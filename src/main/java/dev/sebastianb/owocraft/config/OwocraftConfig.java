@@ -1,18 +1,15 @@
-package dev.sebastianb.owocraft;
+package dev.sebastianb.owocraft.config;
 
 import com.google.gson.GsonBuilder;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import dev.sebastianb.owocraft.client.OwocraftClient;
-import dev.sebastianb.owocraft.client.owo_api.impl.bindings.python.PythonRunnerManagerImpl;
 import dev.sebastianb.owocraft.client.owo_api.impl.bindings.python.PythonScriptInformation;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class OwocraftConfig {
 
@@ -34,6 +31,8 @@ public class OwocraftConfig {
         HANDLER.load();
         OwocraftClient.getPythonRunnerManager()
                 .reloadWithScript(OwocraftConfig.pythonConfigInformation);
+        pythonConfigInformation = OwocraftClient.getPythonRunnerManager().getPythonScripts();
+        HANDLER.save();
     }
 
 }
