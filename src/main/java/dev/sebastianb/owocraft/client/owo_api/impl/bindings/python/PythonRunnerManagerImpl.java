@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 
 public enum PythonRunnerManagerImpl implements PythonRunnerManager {
@@ -125,9 +126,14 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
             Owocraft.getLogger().log(Level.WARNING, "Python script for event " + event + " is not initialized!");
         } else { // allRunningScripts.isEmpty()
             if (scriptInfo.priority >= prevEventPriority && !scriptInfo.shouldFinishEventFirst) {
-                allRunningScripts.values().forEach(Thread::interrupt);
-                allRunningScripts.clear();
-                System.out.println("HAS A HIGHER PRIORITY, STOPPED ALL THREADS");
+                // not relevant as the INTERPRETER is static (meaning it can only block one script at a time)
+                // START
+//                allRunningScripts.values().forEach(Thread::interrupt);
+//                allRunningScripts.clear();
+//                System.out.println("HAS A HIGHER PRIORITY, STOPPED ALL THREADS");
+                // END
+
+                // should override a existing script
                 runPythonCodeFromEvent(event, args, scriptInfo);
             }
         }
@@ -142,10 +148,12 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
                     INTERPRETER.set("variable" + i, arg);
                     i++;
                 }
+                // FIXME: I could make it call a new interpreter but the issue is sensations start flickering
+                // TODO: make it so it can run multiple scripts at once
                 INTERPRETER.exec(scriptInfo.script);
 
             } catch (PyException pyException) {
-                // TODO: proper logging
+                // TODO: proper logging through config
                 if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
                     pyException.printStackTrace();
                 }
