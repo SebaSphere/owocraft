@@ -14,6 +14,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 
 import java.lang.reflect.Field;
+import java.util.Random;
 
 public class OwocraftClient implements ClientModInitializer {
 
@@ -84,6 +85,57 @@ public class OwocraftClient implements ClientModInitializer {
                 e.printStackTrace();
             }
         }
+
+        pythonRunnerManager.initPythonScriptPath(
+                "minecraft", // mod id
+                "environment-raining-script.py", // python path
+                "environment-raining", // event name
+                new Random().nextInt(50)
+        );
+
+        pythonRunnerManager.initPythonScriptPath(
+                "minecraft", // mod id
+                "environment-underwater-script.py", // python path
+                "environment-underwater", // event name
+                new Random().nextInt(50)
+        );
+
+        pythonRunnerManager.initPythonScriptPath(
+                "minecraft", // mod id
+                "environment-in_dimension-script.py", // python path
+                "environment-in_dimension", // event name
+                new Random().nextInt(50)
+        );
+
+
+        pythonRunnerManager.initPythonScriptPath(
+                "minecraft", // mod id
+                "environment-played_sound-script.py", // python path
+                "environment-played_sound", // event name
+                new Random().nextInt(50)
+        );
+
+        pythonRunnerManager.initPythonScriptPath(
+                "minecraft", // mod id
+                "event-speed-script.py", // python path
+                "event-speed", // event name
+                new Random().nextInt(50)
+        );
+
+        pythonRunnerManager.initPythonScriptPath(
+                "minecraft", // mod id
+                "event-in_portal-script.py", // python path
+                "event-in_portal", // event name
+                new Random().nextInt(50)
+        );
+
+
+        pythonRunnerManager.initPythonScriptPath(
+                "minecraft", // mod id
+                "event-gained_experience-script.py", // python path
+                "event-gained_experience", // event name
+                new Random().nextInt(50)
+        );
 
         OwocraftConfig.reload();
 

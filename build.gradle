@@ -30,6 +30,8 @@ loom {
             runDir('runs/server')
         }
     }
+    accessWidenerPath = file("src/main/resources/owocraft.accesswidener")
+
 }
 
 repositories {

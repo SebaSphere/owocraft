@@ -13,6 +13,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.block.CauldronBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;

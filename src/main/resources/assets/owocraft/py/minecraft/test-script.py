@@ -2,4 +2,4 @@
 # I'm starting this, the file should get copied over
 
 
-# Copied over from a resources folder inside the jar
+# Cowpied over from a resources folder inside the jar
