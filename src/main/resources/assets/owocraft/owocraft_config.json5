@@ -1,0 +1,279 @@
+{
+	pythonConfigInformation: {
+		"minecraft:event-speed": {
+			priority: 200,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:fireworks": {
+			priority: 102,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:thorns": {
+			priority: 50,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:lightning_bolt": {
+			priority: 120,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:mob_attack": {
+			priority: 50,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:indirect_magic": {
+			priority: 100,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:outside_border": {
+			priority: 100,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:environment-played_sound": {
+			priority: 50,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:arrow": {
+			priority: 120,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:explosion": {
+			priority: 130,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:dry_out": {
+			priority: 100,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:wither": {
+			priority: 100,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:trident": {
+			priority: 100,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:unattributed_fireball": {
+			priority: 130,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:falling_anvil": {
+			priority: 140,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:fireball": {
+			priority: 130,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:magic": {
+			priority: 100,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:event-gained_experience": {
+			priority: 30,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:environment-raining": {
+			priority: 20,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:test": {
+			priority: 1,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:sting": {
+			priority: 80,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:drown": {
+			priority: 20,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:generic_kill": {
+			priority: 150,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:event-in_portal": {
+			priority: 30,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:player_explosion": {
+			priority: 140,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:mob_projectile": {
+			priority: 100,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:mob_attack_no_aggro": {
+			priority: 100,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:environment-underwater": {
+			priority: 20,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:sonic_boom": {
+			priority: 140,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:on_fire": {
+			priority: 80,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:starve": {
+			priority: 60,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:fall": {
+			priority: 120,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:sweet_berry_bush": {
+			priority: 100,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:player_attack": {
+			priority: 140,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:wind_charge": {
+			priority: 150,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:bad_respawn_point": {
+			priority: 50,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:environment-in_dimension": {
+			priority: 20,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:dragon_breath": {
+			priority: 140,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:hot_floor": {
+			priority: 100,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:in_wall": {
+			priority: 140,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:generic": {
+			priority: 150,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:wither_skull": {
+			priority: 130,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:campfire": {
+			priority: 120,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:cramming": {
+			priority: 140,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:stalagmite": {
+			priority: 140,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:lava": {
+			priority: 140,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:freeze": {
+			priority: 100,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:in_fire": {
+			priority: 130,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:spit": {
+			priority: 80,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:cactus": {
+			priority: 80,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:falling_block": {
+			priority: 1000,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:thrown": {
+			priority: 100,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:out_of_world": {
+			priority: 150,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
+		"minecraft:falling_stalactite": {
+			priority: 140,
+			should_finish_event_first: false,
+			run_generic_event_instead: false
+		},
+		"minecraft:fly_into_wall": {
+			priority: 140,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		}
+	}
+}

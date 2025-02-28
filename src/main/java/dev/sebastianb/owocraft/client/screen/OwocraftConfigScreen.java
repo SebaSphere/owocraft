@@ -19,7 +19,6 @@ public class OwocraftConfigScreen {
 
     public static Screen createScreen(Screen parent) {
         OwocraftConfig.reload();
-        System.out.println("EEEE");
 
         var builder = YetAnotherConfigLib.createBuilder()
                 .title(Component.literal("Owocraft Config")); // TODO: translatable
@@ -75,6 +74,26 @@ public class OwocraftConfigScreen {
                                 .range(0, 1000)
                                 .formatValue(value -> Component.literal(String.valueOf(value)))
                         )
+                        .build())
+                .option(Option.<Boolean>createBuilder()
+                        .name(Component.literal("Run Generic Event Instead"))
+                        .binding(
+                                OwocraftConfig.HANDLER.instance().pythonConfigInformation.values().stream()
+                                        .filter(info -> info.eventName.equals(scriptInformation.eventName))
+                                        .findFirst().get().runGenericEventInstead,
+
+                                () -> OwocraftConfig.HANDLER.instance().pythonConfigInformation.values().stream()
+                                        .filter(info -> info.eventName.equals(scriptInformation.eventName))
+                                        .findFirst().get().runGenericEventInstead, // getter
+
+                                val -> {
+                                    OwocraftConfig.HANDLER.instance().pythonConfigInformation.values().stream()
+                                            .filter(info -> info.eventName.equals(scriptInformation.eventName))
+                                            .findFirst().get().runGenericEventInstead
+                                            = val;
+                                } // setter
+                        )
+                        .controller(booleanOption -> BooleanControllerBuilder.create(booleanOption).trueFalseFormatter())
                         .build())
                 .option(Option.<Boolean>createBuilder()
                         .name(Component.literal("Should finish event"))

@@ -84,7 +84,6 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
             Files.createDirectories(scriptPath.getParent());
         }
         if (Files.notExists(scriptPath)) {
-            System.out.println(scriptPath);
             Files.createFile(scriptPath);
         }
         String script = Files.readString(scriptPath);
@@ -113,28 +112,31 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
     @Override
     public void runPythonScript(String modID, String event, PairedVariableArgument... args) {
         PythonScriptInformation scriptInfo = allLoadedScripts.get(modID + ":" + event);
+        System.out.println(event);
 
         if (event != null && !allRunningScripts.containsKey(event) && allRunningScripts.isEmpty()) {
+            if (!scriptInfo.runGenericEventInstead) {
+                prevEventPriority = scriptInfo.priority; // sets priority when this is supposed to fire
 
-            prevEventPriority = scriptInfo.priority; // sets priority when this is supposed to fire
-
-            System.out.println("RUNNING SCRIPT FOR EVENT: " + event);
-            System.out.println(scriptInfo);
-            runPythonCodeFromEvent(event, args, scriptInfo);
+                runPythonCodeFromEvent(event, args, scriptInfo);
+            }
 
         } else if (event == null) {
             Owocraft.getLogger().log(Level.WARNING, "Python script for event " + event + " is not initialized!");
-        } else { // allRunningScripts.isEmpty()
-            if (scriptInfo.priority >= prevEventPriority && !scriptInfo.shouldFinishEventFirst) {
-                // not relevant as the INTERPRETER is static (meaning it can only block one script at a time)
-                // START
+        }
+        else { // allRunningScripts.isEmpty()
+            if (scriptInfo != null) {
+                if (scriptInfo.priority >= prevEventPriority && !scriptInfo.shouldFinishEventFirst) {
+                    // not relevant as the INTERPRETER is static (meaning it can only block one script at a time)
+                    // START
 //                allRunningScripts.values().forEach(Thread::interrupt);
 //                allRunningScripts.clear();
 //                System.out.println("HAS A HIGHER PRIORITY, STOPPED ALL THREADS");
-                // END
+                    // END
 
-                // should override a existing script
-                runPythonCodeFromEvent(event, args, scriptInfo);
+                    // should override a existing script
+                    runPythonCodeFromEvent(event, args, scriptInfo);
+                }
             }
         }
     }
@@ -156,14 +158,11 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
                     pyException.printStackTrace();
                 }
             } finally {
-                System.out.println("FINISHED THREAD!!!");
                 allRunningScripts.remove(event);
             }
         });
 
         allRunningScripts.put(event, pyScript);
-        System.out.println("!!!!!");
-        System.out.println(allRunningScripts);
 
         pyScript.start();
     }

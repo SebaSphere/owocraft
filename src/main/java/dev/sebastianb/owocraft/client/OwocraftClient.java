@@ -56,7 +56,6 @@ public class OwocraftClient implements ClientModInitializer {
         pythonRunnerManager = API.getPythonRunnerManager();
 
         panamaBindingManager.loadDLL();
-        System.out.println(connectionStateManager.getState());
         panamaBindingManager.runEmptyVoidMethod("startOwoSearch");
 
         pythonRunnerManager.initPythonScriptPath("minecraft", "test-script.py", "test", 1);

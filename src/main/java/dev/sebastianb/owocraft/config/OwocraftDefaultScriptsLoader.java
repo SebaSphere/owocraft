@@ -10,7 +10,6 @@ public class OwocraftDefaultScriptsLoader {
 
     public static void register() {
 
-        System.out.println("MEOW");
         Path modContainerPath = FabricLoader.getInstance()
                 .getModContainer("owocraft")
                 .orElseThrow(() -> new RuntimeException("Failed to get mod container"))
@@ -35,7 +34,6 @@ public class OwocraftDefaultScriptsLoader {
     private static void moveDefaultScriptToConfig(Path scriptPath) {
         Path configPath = FabricLoader.getInstance().getConfigDir()
                 .resolve("owocraft/python/minecraft"); // TODO: make this dependent on mod id
-        System.out.println(configPath);
 
         // check if the filename of scriptPath is inside configPath
         if (!Files.exists(configPath.resolve(scriptPath.getFileName()))) {
