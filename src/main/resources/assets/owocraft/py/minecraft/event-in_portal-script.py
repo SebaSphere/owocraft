@@ -10,7 +10,7 @@ canRun = True
 
 start_time = time.time()
 
-duration = 1.0
+duration = 0.3
 
 while canRun:
     # Calculate elapsed time
