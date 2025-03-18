@@ -108,23 +108,25 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
     int prevEventPriority = 0;
 
 
+
+    long currentTime = System.currentTimeMillis();
     // TODO: see why it barely pops up for a second
     @Override
-    public void runPythonScript(String modID, String event, PairedVariableArgument... args) {
-        PythonScriptInformation scriptInfo = allLoadedScripts.get(modID + ":" + event);
-        System.out.println(event);
+    public boolean runPythonScript(String modID, String event, PairedVariableArgument... args) {
 
+
+        PythonScriptInformation scriptInfo = allLoadedScripts.get(modID + ":" + event);
         if (event != null && !allRunningScripts.containsKey(event) && allRunningScripts.isEmpty()) {
             if (!scriptInfo.runGenericEventInstead) {
                 prevEventPriority = scriptInfo.priority; // sets priority when this is supposed to fire
 
                 runPythonCodeFromEvent(event, args, scriptInfo);
+                return false;
             }
 
         } else if (event == null) {
             Owocraft.getLogger().log(Level.WARNING, "Python script for event " + event + " is not initialized!");
-        }
-        else { // allRunningScripts.isEmpty()
+        } else { // allRunningScripts.isEmpty()
             if (scriptInfo != null) {
                 if (scriptInfo.priority >= prevEventPriority && !scriptInfo.shouldFinishEventFirst) {
                     // not relevant as the INTERPRETER is static (meaning it can only block one script at a time)
@@ -136,12 +138,17 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
 
                     // should override a existing script
                     runPythonCodeFromEvent(event, args, scriptInfo);
+                    return false;
                 }
             }
         }
+
+        return true;
     }
 
     private void runPythonCodeFromEvent(String event, PairedVariableArgument[] args, PythonScriptInformation scriptInfo) {
+        currentTime = System.currentTimeMillis();
+
         var pyScript = new Thread(() -> {
             try {
                 for (PairedVariableArgument arg : args) {

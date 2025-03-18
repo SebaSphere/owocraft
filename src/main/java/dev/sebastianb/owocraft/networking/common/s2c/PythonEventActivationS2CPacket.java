@@ -13,8 +13,12 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.block.CauldronBlock;
 import org.jetbrains.annotations.NotNull;
+import org.python.antlr.ast.Str;
 
 import java.util.Objects;
 
@@ -38,6 +42,7 @@ public class PythonEventActivationS2CPacket implements IPacket {
     private static void activatePythonEvent(@NotNull Minecraft client, @NotNull ClientPlayContext handler, @NotNull FriendlyByteBuf buf) {
         String damageSourceKey = buf.readUtf();
         String damageEntity = buf.readUtf();
+        String weaponType = buf.readUtf();
         float damage = buf.readFloat();
 
         var damageSourceNamespaceToKey = damageSourceKey.split(":");
@@ -48,7 +53,8 @@ public class PythonEventActivationS2CPacket implements IPacket {
         client.execute(() -> {
             OwocraftClient.getPythonRunnerManager().runPythonScript(modID, key,
                     new PairedVariableArgument("damage", damage),
-                    new PairedVariableArgument("damageFromEntityType", damageEntity)
+                    new PairedVariableArgument("damageFromEntityType", damageEntity),
+                    new PairedVariableArgument("weaponType", weaponType)
             );
         });
 
@@ -62,7 +68,20 @@ public class PythonEventActivationS2CPacket implements IPacket {
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
         buf.writeUtf(damageSourceKey);
         buf.writeUtf(damageEntity);
+
+        if (damageSource.getWeaponItem() != null) {
+            if (damageSource.getWeaponItem().getItem() instanceof SwordItem) {
+                buf.writeUtf("sword");
+            } else if (damageSource.getWeaponItem().getItem() instanceof AxeItem) {
+                buf.writeUtf("axe");
+            } else {
+                buf.writeUtf("hand");
+            }
+        } else {
+            buf.writeUtf("hand");
+        }
         buf.writeFloat(damage);
+
 
         PacketSender.s2c(serverPlayer).send(Owocraft.id("python_event_activation"), buf);
     }

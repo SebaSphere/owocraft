@@ -9,6 +9,7 @@ public class HapticVestInteraction implements SensationManager {
 
     }
 
+    private static long currentTime = System.currentTimeMillis();
     @Override
     public boolean runSensation(String sensationFromParsedString, String muscleFromParsedString) {
         return OwocraftClient.getSensationManager().runSensation(sensationFromParsedString, muscleFromParsedString);

@@ -19,6 +19,6 @@ public interface PythonRunnerManager {
 
     void stopPythonScript(String eventName);
 
-    void runPythonScript(String modID, String eventName, PairedVariableArgument... args);
+    boolean runPythonScript(String modID, String eventName, PairedVariableArgument... args);
 
 }
