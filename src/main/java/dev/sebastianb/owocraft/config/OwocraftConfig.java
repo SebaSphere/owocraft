@@ -17,7 +17,7 @@ public class OwocraftConfig {
             .id(ResourceLocation.fromNamespaceAndPath("owocraft", "owocraft_config"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(FabricLoader.getInstance().getConfigDir().resolve("owocraft_config.json5"))
-                    .appendGsonBuilder(GsonBuilder::setPrettyPrinting) // not needed, pretty print by default
+                    .appendGsonBuilder(builder -> builder.setPrettyPrinting().serializeNulls()) // serialize nulls
                     .setJson5(true)
                     .build())
             .build();
@@ -28,11 +28,20 @@ public class OwocraftConfig {
 
 
     public static void reload() {
+
+        System.out.println("ASASFEFAS");
+
         HANDLER.load();
+        System.out.println("ddSSD");
         OwocraftClient.getPythonRunnerManager()
                 .reloadWithScript(OwocraftConfig.pythonConfigInformation);
         pythonConfigInformation = OwocraftClient.getPythonRunnerManager().getPythonScripts();
+
+        System.out.println("ddd22");
+
         HANDLER.save();
+
+        System.out.println("111ddSSD");
     }
 
 }

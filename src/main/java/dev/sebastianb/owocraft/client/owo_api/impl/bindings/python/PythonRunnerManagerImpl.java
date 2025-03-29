@@ -4,6 +4,7 @@ import dev.sebastianb.owocraft.Owocraft;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.bindings.PythonRunnerManager;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.registries.BuiltInRegistries;
 import org.python.core.PyException;
 import org.python.util.PythonInterpreter;
 
@@ -122,6 +123,9 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
 
                 runPythonCodeFromEvent(event, args, scriptInfo);
                 return false;
+            } else {
+                PythonScriptInformation genericScript = allLoadedScripts.get(modID + ":" + "generic_event");
+                runPythonCodeFromEvent("generic_event", args, genericScript);
             }
 
         } else if (event == null) {
@@ -136,8 +140,12 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
 //                System.out.println("HAS A HIGHER PRIORITY, STOPPED ALL THREADS");
                     // END
 
-                    // should override a existing script
-                    runPythonCodeFromEvent(event, args, scriptInfo);
+                    if (!scriptInfo.runGenericEventInstead) {
+                        runPythonCodeFromEvent(event, args, scriptInfo);
+                    } else {
+                        PythonScriptInformation genericScript = allLoadedScripts.get(modID + ":" + "generic_event");
+                        runPythonCodeFromEvent("generic_event", args, genericScript);
+                    }
                     return false;
                 }
             }
@@ -148,6 +156,7 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
 
     private void runPythonCodeFromEvent(String event, PairedVariableArgument[] args, PythonScriptInformation scriptInfo) {
         currentTime = System.currentTimeMillis();
+
 
         var pyScript = new Thread(() -> {
             try {

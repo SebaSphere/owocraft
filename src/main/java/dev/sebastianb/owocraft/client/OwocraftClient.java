@@ -58,8 +58,6 @@ public class OwocraftClient implements ClientModInitializer {
         panamaBindingManager.loadDLL();
         panamaBindingManager.runEmptyVoidMethod("startOwoSearch");
 
-        pythonRunnerManager.initPythonScriptPath("minecraft", "test-script.py", "test", 1);
-
 
         // Use damageTypes interface's class object
         Class<DamageTypes> damageTypesClass = DamageTypes.class;
@@ -84,6 +82,17 @@ public class OwocraftClient implements ClientModInitializer {
                 e.printStackTrace();
             }
         }
+
+
+        pythonRunnerManager.initPythonScriptPath(
+                "minecraft", // mod id
+                "event-ender_pearl_thrown-script.py", // python path
+                "ender_pearl_thrown", // event name
+                new Random().nextInt(50)
+        );
+
+        pythonRunnerManager.initPythonScriptPath("minecraft", "generic_event-script.py", "generic_event", 1);
+
 
         pythonRunnerManager.initPythonScriptPath(
                 "minecraft", // mod id

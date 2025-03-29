@@ -60,13 +60,19 @@ public class PythonEventActivationS2CPacket implements IPacket {
 
     }
 
-    public static void sendPacketToServer(DamageSource damageSource, ServerPlayer serverPlayer, float damage) {
+    public static void sendPacketToServer(DamageSource damageSource, ServerPlayer serverPlayer, float damage, boolean isEnderpearl) {
         String damageSourceKey = damageSource.typeHolder().getRegisteredName();
+        System.out.println(damageSourceKey);
 
         String damageEntity = damageSource.getEntity() != null ? Objects.requireNonNull(damageSource.getEntity().getType().toShortString()) : "null";
 
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-        buf.writeUtf(damageSourceKey);
+
+        if (isEnderpearl) {
+            buf.writeUtf("minecraft:ender_pearl_thrown");
+        } else {
+            buf.writeUtf(damageSourceKey);
+        }
         buf.writeUtf(damageEntity);
 
         if (damageSource.getWeaponItem() != null) {
@@ -81,6 +87,8 @@ public class PythonEventActivationS2CPacket implements IPacket {
             buf.writeUtf("hand");
         }
         buf.writeFloat(damage);
+
+
 
 
         PacketSender.s2c(serverPlayer).send(Owocraft.id("python_event_activation"), buf);
