@@ -10,6 +10,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class OwocraftConfig {
 
@@ -26,6 +27,11 @@ public class OwocraftConfig {
     public static HashMap<String, PythonScriptInformation> pythonConfigInformation
             = OwocraftClient.getPythonRunnerManager().getPythonScripts();
 
+    @SerialEntry
+    public static List<String> ipAddresses = OwocraftClient.getConnectionStateManager().getIPAddresses();
+
+    @SerialEntry
+    public static boolean shouldAutoconnect = OwocraftClient.getConnectionStateManager().shouldAutoconnect();
 
     public static void reload() {
 

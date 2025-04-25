@@ -1,17 +1,16 @@
 package dev.sebastianb.owocraft.client.screen;
 
-import dev.isxander.yacl3.api.ConfigCategory;
-import dev.isxander.yacl3.api.Option;
-import dev.isxander.yacl3.api.OptionGroup;
-import dev.isxander.yacl3.api.YetAnotherConfigLib;
+import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
+import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import dev.sebastianb.owocraft.config.OwocraftConfig;
 import dev.sebastianb.owocraft.client.OwocraftClient;
 import dev.sebastianb.owocraft.client.owo_api.impl.bindings.python.PythonScriptInformation;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OwocraftConfigScreen {
@@ -22,6 +21,8 @@ public class OwocraftConfigScreen {
 
         var builder = YetAnotherConfigLib.createBuilder()
                 .title(Component.literal("Owocraft Config")); // TODO: translatable
+
+        vestManagement(builder);
 
         var categoryBuilder = ConfigCategory.createBuilder()
                 .name(Component.literal("Events"));
@@ -37,6 +38,8 @@ public class OwocraftConfigScreen {
 
         builder.category(categoryBuilder.build());
 
+
+
         var screen = builder
                 .save(() -> {
                     OwocraftConfig.HANDLER.save();
@@ -47,6 +50,55 @@ public class OwocraftConfigScreen {
                 .generateScreen(parent);
 
         return screen;
+    }
+
+    private static void vestManagement(YetAnotherConfigLib.Builder builder) {
+        var vestManagementCategoryBuilder = ConfigCategory.createBuilder()
+                .name(Component.literal("Vest Management"));
+
+        var autoConnectGroupBuilder = OptionGroup.createBuilder();
+
+        autoConnectGroupBuilder.option(Option.<Boolean>createBuilder()
+                .name(Component.literal("Should Auto-connect"))
+                .binding(
+                        OwocraftConfig.shouldAutoconnect, // the default value can be changed
+                        () -> OwocraftConfig.shouldAutoconnect, // getter
+                        newValue -> { // setter
+                            OwocraftConfig.shouldAutoconnect = newValue;
+                        }
+                )
+                .controller(BooleanControllerBuilder::create)
+                .build());
+
+        vestManagementCategoryBuilder.group(autoConnectGroupBuilder.build());
+
+
+        var ipList = ListOption.<String>createBuilder();
+
+
+        ipList
+                .name(Component.literal("IP Address"))
+                .binding(
+                        OwocraftConfig.ipAddresses, // change to mutable list
+                        () -> OwocraftConfig.ipAddresses, // getter
+                        newValues -> { // setter
+                            System.out.println("AAA");
+                            OwocraftConfig.ipAddresses = newValues;
+                        }
+                )
+                .description(
+                        OptionDescription.createBuilder()
+                        .text(Component.literal("IP Addresses useable from OWO\n" + String.join("\n", OwocraftConfig.ipAddresses)))
+                        .build()
+                )
+                .controller(StringControllerBuilder::create) // usual controllers, passed to every entry
+                .initial("127.0.0.1") // when adding a new entry to the list, this is the initial value it has
+                .build();
+
+        vestManagementCategoryBuilder.group(ipList.build());
+
+        builder.category(vestManagementCategoryBuilder.build());
+
     }
 
     public static void recursiveOptionAdd(PythonScriptInformation scriptInformation, OptionGroup.Builder groupBuilder) {

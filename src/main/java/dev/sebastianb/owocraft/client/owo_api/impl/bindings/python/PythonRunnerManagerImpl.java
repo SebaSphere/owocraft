@@ -111,12 +111,44 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
 
 
     long currentTime = System.currentTimeMillis();
-    // TODO: see why it barely pops up for a second
+
+
+    long lastEnvScriptTime;
+
+    boolean shouldDelayEnvironmentScripts = false;
+
+    // TODO: make a config
+    double ENV_SCRIPT_DELAY = 5000;
+
     @Override
     public boolean runPythonScript(String modID, String event, PairedVariableArgument... args) {
 
 
+
         PythonScriptInformation scriptInfo = allLoadedScripts.get(modID + ":" + event);
+
+        if (!event.startsWith("environment")) {
+
+            // Check if enough time has passed since the last environmental script was executed
+            shouldDelayEnvironmentScripts = true;
+            lastEnvScriptTime = System.currentTimeMillis();
+
+
+        }
+
+        if (event.startsWith("environment")) {
+            if (shouldDelayEnvironmentScripts) {
+                if (System.currentTimeMillis() - lastEnvScriptTime > ENV_SCRIPT_DELAY) {
+                    shouldDelayEnvironmentScripts = false;
+                    lastEnvScriptTime = System.currentTimeMillis(); // Update time of last environmental script run
+
+                }
+                return false;
+
+            }
+        }
+
+
         if (event != null && !allRunningScripts.containsKey(event) && allRunningScripts.isEmpty()) {
             if (!scriptInfo.runGenericEventInstead) {
                 prevEventPriority = scriptInfo.priority; // sets priority when this is supposed to fire
@@ -167,6 +199,7 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
                 // FIXME: I could make it call a new interpreter but the issue is sensations start flickering
                 // TODO: make it so it can run multiple scripts at once
                 INTERPRETER.exec(scriptInfo.script);
+
 
             } catch (PyException pyException) {
                 // TODO: proper logging through config

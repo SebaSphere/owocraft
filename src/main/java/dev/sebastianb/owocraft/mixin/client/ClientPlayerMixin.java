@@ -31,6 +31,7 @@ public abstract class ClientPlayerMixin extends AbstractClientPlayer {
     @Inject(method = "setExperienceValues", at = @At("HEAD"), cancellable = true)
     public void giveExperiencePoints(float f, int i, int j, CallbackInfo ci) {
 
+
         OwocraftClient.getPythonRunnerManager().runPythonScript(
                 "minecraft", "event-gained_experience",
                 new PairedVariableArgument("playerAge", tickCount)
@@ -44,47 +45,40 @@ public abstract class ClientPlayerMixin extends AbstractClientPlayer {
     private void onTick(CallbackInfo ci) {
 
         // FIXME: figure out why events that always fire cause other events to flicker
-        if (false) {
 
-            if (this.isInRain()) {
+        
 
-                boolean shouldRun = OwocraftClient.getPythonRunnerManager().runPythonScript(
-                        "minecraft", "environment-raining",
-                        new PairedVariableArgument("playerAge", tickCount)
-                );
+        if (this.isInRain()) {
 
-            }
-            if (this.isUnderWater()) {
+            boolean shouldRun = OwocraftClient.getPythonRunnerManager().runPythonScript(
+                    "minecraft", "environment-raining",
+                    new PairedVariableArgument("playerAge", tickCount)
+            );
+
+        }
+        if (this.isUnderWater()) {
+            OwocraftClient.getPythonRunnerManager().runPythonScript(
+                    "minecraft", "environment-underwater",
+                    new PairedVariableArgument("playerAge", tickCount)
+            );
+        }
+        if (getDeltaMovement().distanceTo(Vec3.ZERO) > 0.8) {
+            OwocraftClient.getPythonRunnerManager().runPythonScript(
+                    "minecraft", "event-speed",
+                    new PairedVariableArgument("playerAge", tickCount),
+                    new PairedVariableArgument("playerSpeed", getDeltaMovement().distanceTo(Vec3.ZERO))
+            );
+        }
+        String playerDimension = this.level().dimension().location().toString();
+        // check if player is in nether portal
+        if (this.portalProcess != null) {
+            if (this.portalProcess.isInsidePortalThisTick()) {
+
                 OwocraftClient.getPythonRunnerManager().runPythonScript(
-                        "minecraft", "environment-underwater",
-                        new PairedVariableArgument("playerAge", tickCount)
-                );
-            }
-            if (getDeltaMovement().distanceTo(Vec3.ZERO) > 0.8) {
-                System.out.println("MEIOW");
-                OwocraftClient.getPythonRunnerManager().runPythonScript(
-                        "minecraft", "event-speed",
+                        "minecraft", "event-in_portal",
                         new PairedVariableArgument("playerAge", tickCount),
-                        new PairedVariableArgument("playerSpeed", getDeltaMovement().distanceTo(Vec3.ZERO))
+                        new PairedVariableArgument("playerDimension", playerDimension)
                 );
-            }
-            String playerDimension = this.level().dimension().location().toString();
-            // check if player is in nether portal
-            if (this.portalProcess != null) {
-                if (this.portalProcess.isInsidePortalThisTick()) {
-
-                    OwocraftClient.getPythonRunnerManager().runPythonScript(
-                            "minecraft", "event-in_portal",
-                            new PairedVariableArgument("playerAge", tickCount),
-                            new PairedVariableArgument("playerDimension", playerDimension)
-                    );
-                } else {
-                    OwocraftClient.getPythonRunnerManager().runPythonScript(
-                            "minecraft", "environment-in_dimension",
-                            new PairedVariableArgument("playerAge", tickCount),
-                            new PairedVariableArgument("playerDimension", playerDimension)
-                    );
-                }
             } else {
                 OwocraftClient.getPythonRunnerManager().runPythonScript(
                         "minecraft", "environment-in_dimension",
@@ -92,6 +86,13 @@ public abstract class ClientPlayerMixin extends AbstractClientPlayer {
                         new PairedVariableArgument("playerDimension", playerDimension)
                 );
             }
+        } else {
+            OwocraftClient.getPythonRunnerManager().runPythonScript(
+                    "minecraft", "environment-in_dimension",
+                    new PairedVariableArgument("playerAge", tickCount),
+                    new PairedVariableArgument("playerDimension", playerDimension)
+            );
         }
+
     }
 }

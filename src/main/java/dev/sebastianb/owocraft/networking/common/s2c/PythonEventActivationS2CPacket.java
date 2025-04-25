@@ -13,9 +13,11 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.CauldronBlock;
 import org.jetbrains.annotations.NotNull;
 import org.python.antlr.ast.Str;
@@ -64,9 +66,12 @@ public class PythonEventActivationS2CPacket implements IPacket {
         String damageSourceKey = damageSource.typeHolder().getRegisteredName();
         System.out.println(damageSourceKey);
 
+
+
         String damageEntity = damageSource.getEntity() != null ? Objects.requireNonNull(damageSource.getEntity().getType().toShortString()) : "null";
 
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+
 
         if (isEnderpearl) {
             buf.writeUtf("minecraft:ender_pearl_thrown");
