@@ -5,6 +5,7 @@ import dev.sebastianb.owocraft.networking.common.s2c.PythonEventActivationS2CPac
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,6 +26,7 @@ public abstract class ServerPlayerMixin extends Player {
 
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     private void onHurt(DamageSource damageSource, float f, CallbackInfoReturnable<Boolean> cir) {
+
         if (!level().isClientSide && !isDeadOrDying()) {
             if (this.fallDistance == 0 && damageSources().fall().equals(damageSource)) {
                 // should handle ender pearl

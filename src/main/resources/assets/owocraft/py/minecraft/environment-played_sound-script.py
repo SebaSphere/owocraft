@@ -16,7 +16,6 @@ def run_haptic_vest_interaction_skulk_click():
     duration = 4  # Total duration remains 4
 
     while True:
-        print("MEOW")
         # Calculate elapsed time
         elapsed_time = time.time() - start_time
 
