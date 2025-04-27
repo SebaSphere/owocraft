@@ -1,22 +1,15 @@
 package dev.sebastianb.owocraft.mixin.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import dev.sebastianb.owocraft.client.OwocraftClient;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import dev.sebastianb.owocraft.utils.HapticsIconWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.*;
 
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
@@ -35,44 +28,8 @@ public abstract class TitleScreenMixin extends Screen {
         super(component);
     }
 
-
-    @Inject(method = "render", at = @At(value = "TAIL"))
-    private void renderCustomTexture(GuiGraphics guiGraphics, int i, int j, float f, CallbackInfo ci) {
-        renderTexture(guiGraphics, i, j);
+    @Inject(method = "init", at = @At(value = "TAIL"))
+    private void injectWidget(CallbackInfo ci) {
+        addRenderableWidget(new HapticsIconWidget(16,16,32,32));
     }
-
-    private void renderTexture(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-
-        RenderSystem.enableBlend();
-
-
-        ItemStack itemToRender;
-        switch (OwocraftClient.getConnectionStateManager().getState()) {
-            case CONNECTING -> itemToRender = Items.YELLOW_DYE.getDefaultInstance();
-            case CONNECTED -> itemToRender = Items.GREEN_DYE.getDefaultInstance();
-            case DISCONNECTED -> itemToRender = Items.RED_DYE.getDefaultInstance();
-            default -> itemToRender = Items.WHITE_DYE.getDefaultInstance();
-        }
-        // check if hovering over where the item should be 16 16 32 32 and display tooltip
-        int startX = 16;
-        int startY = 16;
-        int width = 32;
-        int height = 32;
-
-        if (mouseX >= startX && mouseY >= startY && mouseX < startX + width && mouseY < startY + height) {
-
-            // TODO: make this a translatable
-            Component text
-                    = Component.literal("Connection status: "
-                    + OwocraftClient.getConnectionStateManager().getState().name().toLowerCase(Locale.ROOT)
-            );
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, text, mouseX, mouseY);
-        }
-
-        guiGraphics.renderFakeItem(itemToRender, 16, 16);
-        RenderSystem.disableBlend();
-
-    }
-    
-
 }
