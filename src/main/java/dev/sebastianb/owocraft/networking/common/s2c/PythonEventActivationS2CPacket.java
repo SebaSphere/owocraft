@@ -68,7 +68,7 @@ public class PythonEventActivationS2CPacket implements IPacket {
 
 
 
-        String damageEntity = damageSource.getEntity() != null ? Objects.requireNonNull(damageSource.getEntity().getType().toShortString()) : "null";
+        String damageEntity = damageSource.getEntity() != null ? Objects.requireNonNull(damageSource.getEntity().getType().toString()) : "null";
 
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 

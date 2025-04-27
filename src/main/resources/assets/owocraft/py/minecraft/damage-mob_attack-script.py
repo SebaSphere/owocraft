@@ -3,6 +3,39 @@ from dev.sebastianb.owocraft.client.facade import HapticVestInteraction
 import random
 
 
+def run_haptic_vest_interaction_large_hands():
+
+    muscles = "Pectoral_R,Pectoral_L", "Arm_R,Arm_L", "Dorsal_R,Dorsal_L"
+    hapticVestInteraction = HapticVestInteraction()
+
+    canRun = True
+
+    # Record the start time
+    start_time = time.time()
+
+    # Duration in seconds
+    duration = 0.5
+
+    random_muscle = random.choice(muscles)
+
+    while canRun:
+        # Calculate elapsed time
+        elapsed_time = time.time() - start_time
+
+        # Linearly scale intensity based on elapsed time
+        intensity = max(0, 70 - (elapsed_time / duration) * 70)
+
+        # Run the haptic sensation with updated intensity
+        canRun = hapticVestInteraction.runSensation(
+            "100,0.1,{:.2f},0,0,0,Impact".format(intensity), random_muscle
+        )
+
+        # Break the loop if the duration has passed
+        if elapsed_time > duration:
+            canRun = False
+
+        time.sleep(0.1)  # run 10 times a second
+
 def run_haptic_vest_interaction_slash():
     upper_body_muscles = "Pectoral_R,Pectoral_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L"
     lower_body_muscles = "Abdominal_R,Abdominal_L,Lumbar_R,Lumbar_L"
@@ -84,7 +117,10 @@ def run_haptic_vest_interaction_hands():
         time.sleep(0.1)  # run 10 times a second
 
 
-if weaponType in ["sword", "axe"]:
-    run_haptic_vest_interaction_slash()
+if damageFromEntityType in ["entity.minecraft.warden", "entity.minecraft.iron_golem", "entity.minecraft.ender_dragon"]:
+    run_haptic_vest_interaction_large_hands()
 else:
-    run_haptic_vest_interaction_hands()
+    if weaponType in ["sword", "axe"]:
+        run_haptic_vest_interaction_slash()
+    else:
+        run_haptic_vest_interaction_hands()

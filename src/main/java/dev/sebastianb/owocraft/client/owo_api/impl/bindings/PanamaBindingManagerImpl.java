@@ -14,6 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
 
+// https://github.com/apache/sis/blob/ac4ad3f36a17457e51dce01a35a5a2ad5645ac39/optional/src/org.apache.sis.storage.gdal/main/org/apache/sis/storage/panama/NativeFunctions.java#L134
+// not a bad class to look at
 public enum PanamaBindingManagerImpl implements PanamaBindingManager {
 
     INSTANCE;
@@ -85,6 +87,33 @@ public enum PanamaBindingManagerImpl implements PanamaBindingManager {
 
                 return (boolean) methodHandle
                         .invokeWithArguments(segments.toArray(MemorySegment[]::new));
+            } else {
+                throw new RuntimeException("Method " + methodName + " not found");
+            }
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean isNull(final MemorySegment result) {
+        return (result == null) || result.address() == 0;
+    }
+
+
+    @Override
+    public String getStringFromMethod(String methodName) {
+        try {
+            Optional<MemorySegment> memSeg = loaderLookup.find(methodName);
+            if (memSeg.isPresent()) {
+                MethodHandle methodHandle = memSeg.or(() -> stdlibLookup.find(methodName))
+                        .map(symbolSeg -> nativeLinker
+                                .downcallHandle(symbolSeg, FunctionDescriptor.of(ValueLayout.ADDRESS)))
+                        .orElseThrow();
+                MemorySegment result;
+                try (Arena local = Arena.ofConfined()) {
+                    result = (MemorySegment) methodHandle.invokeExact();
+                }
+                return isNull(result) ? null : result.reinterpret(Integer.MAX_VALUE).getString(0);
             } else {
                 throw new RuntimeException("Method " + methodName + " not found");
             }

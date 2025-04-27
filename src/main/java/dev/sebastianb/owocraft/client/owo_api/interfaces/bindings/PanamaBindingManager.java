@@ -8,6 +8,8 @@ public interface PanamaBindingManager {
 
     boolean getBooleanStateInvokeMultiplePassedStringMethod(String methodName, String... passedString);
 
+    String getStringFromMethod(String methodName);
+
     void loadDLL();
 
 }

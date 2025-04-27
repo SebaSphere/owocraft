@@ -124,7 +124,6 @@ public enum PythonRunnerManagerImpl implements PythonRunnerManager {
     public boolean runPythonScript(String modID, String event, PairedVariableArgument... args) {
 
 
-
         PythonScriptInformation scriptInfo = allLoadedScripts.get(modID + ":" + event);
 
         if (!event.startsWith("environment")) {

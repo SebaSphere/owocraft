@@ -130,6 +130,22 @@ public class OwocraftClient implements ClientModInitializer {
                 new Random().nextInt(50)
         );
 
+
+        pythonRunnerManager.initPythonScriptPath(
+                "minecraft", // mod id
+                "event-guardian_target-script.py", // python path
+                "event-guardian_target", // event name
+                new Random().nextInt(50)
+        );
+
+
+        pythonRunnerManager.initPythonScriptPath(
+                "minecraft", // mod id
+                "event-drinking-script.py", // python path
+                "event-drinking", // event name
+                new Random().nextInt(50)
+        );
+
         pythonRunnerManager.initPythonScriptPath(
                 "minecraft", // mod id
                 "event-in_portal-script.py", // python path

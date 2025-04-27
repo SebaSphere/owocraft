@@ -13,7 +13,6 @@
   "client": [
     "client.ClientLevelMixin",
     "client.ClientPlayerMixin",
-    "client.MinecraftMixin",
     "client.TitleScreenMixin"
   ]
 }

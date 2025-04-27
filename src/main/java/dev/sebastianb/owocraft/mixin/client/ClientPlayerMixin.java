@@ -9,12 +9,17 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.sounds.SoundEventListener;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.monster.Guardian;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.List;
 
 @Mixin(LocalPlayer.class)
 public abstract class ClientPlayerMixin extends AbstractClientPlayer {
@@ -46,7 +51,30 @@ public abstract class ClientPlayerMixin extends AbstractClientPlayer {
 
         // FIXME: figure out why events that always fire cause other events to flicker
 
-        
+
+        List<Guardian> guardiansWithinRange = this.level().getEntitiesOfClass(Guardian.class, new AABB(
+                this.getX() - 10.0D, this.getY() - 10.0D, this.getZ() - 10.0D,
+                this.getX() + 10.0D, this.getY() + 10.0D, this.getZ() + 10.0D));
+
+        for (Guardian guardian : guardiansWithinRange) {
+            if (guardian.getActiveAttackTarget() == this) {
+
+                OwocraftClient.getPythonRunnerManager().runPythonScript(
+                        "minecraft", "event-guardian_target",
+                        new PairedVariableArgument("playerAge", tickCount)
+                );
+                break;
+            }
+        }
+
+        if (this.isUsingItem()) {
+            if (this.useItem.getItem() instanceof PotionItem) {
+                boolean shouldRun = OwocraftClient.getPythonRunnerManager().runPythonScript(
+                        "minecraft", "event-drinking",
+                        new PairedVariableArgument("playerAge", tickCount)
+                );
+            }
+        }
 
         if (this.isInRain()) {
 

@@ -60,6 +60,11 @@ public class OwocraftConfigScreen {
 
         autoConnectGroupBuilder.option(Option.<Boolean>createBuilder()
                 .name(Component.literal("Should Auto-connect"))
+                .description(
+                        OptionDescription.createBuilder()
+                                .text(Component.literal("If auto-connect is ON, IP addresses will not be connectable"))
+                                .build()
+                )
                 .binding(
                         OwocraftConfig.shouldAutoconnect, // the default value can be changed
                         () -> OwocraftConfig.shouldAutoconnect, // getter
@@ -82,13 +87,15 @@ public class OwocraftConfigScreen {
                         OwocraftConfig.ipAddresses, // change to mutable list
                         () -> OwocraftConfig.ipAddresses, // getter
                         newValues -> { // setter
-                            System.out.println("AAA");
                             OwocraftConfig.ipAddresses = newValues;
+                            OwocraftClient.getPanamaBindingManager()
+                                    .getBooleanStateInvokeMultiplePassedStringMethod("connectToVest", String.valueOf(OwocraftConfig.ipAddresses));
                         }
                 )
                 .description(
                         OptionDescription.createBuilder()
-                        .text(Component.literal("IP Addresses useable from OWO\n" + String.join("\n", OwocraftConfig.ipAddresses)))
+                        .text(Component.literal("IP Addresses useable from OWO\n"
+                                + OwocraftClient.getPanamaBindingManager().getStringFromMethod("getScannedIPs")))
                         .build()
                 )
                 .controller(StringControllerBuilder::create) // usual controllers, passed to every entry
