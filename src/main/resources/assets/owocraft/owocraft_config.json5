@@ -8,12 +8,12 @@
 		"minecraft:fireworks": {
 			priority: 102,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:thorns": {
 			priority: 50,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:event-drinking": {
 			priority: 40,
@@ -22,8 +22,8 @@
 		},
 		"minecraft:lightning_bolt": {
 			priority: 120,
-			should_finish_event_first: true,
-			run_generic_event_instead: false
+			should_finish_event_first: false,
+			run_generic_event_instead: true
 		},
 		"minecraft:mob_attack": {
 			priority: 50,
@@ -38,7 +38,7 @@
 		"minecraft:outside_border": {
 			priority: 100,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:environment-played_sound": {
 			priority: 30,
@@ -58,7 +58,7 @@
 		"minecraft:dry_out": {
 			priority: 100,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:wither": {
 			priority: 100,
@@ -73,12 +73,12 @@
 		"minecraft:trident": {
 			priority: 100,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:unattributed_fireball": {
 			priority: 130,
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:falling_anvil": {
 			priority: 140,
@@ -88,7 +88,7 @@
 		"minecraft:fireball": {
 			priority: 130,
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:magic": {
 			priority: 100,
@@ -108,7 +108,7 @@
 		"minecraft:sting": {
 			priority: 80,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:drown": {
 			priority: 20,
@@ -118,7 +118,7 @@
 		"minecraft:generic_kill": {
 			priority: 150,
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:event-guardian_target": {
 			priority: 50,
@@ -133,12 +133,12 @@
 		"minecraft:player_explosion": {
 			priority: 140,
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:mob_projectile": {
 			priority: 100,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:mob_attack_no_aggro": {
 			priority: 100,
@@ -163,7 +163,7 @@
 		"minecraft:starve": {
 			priority: 60,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:fall": {
 			priority: 120,
@@ -173,22 +173,22 @@
 		"minecraft:sweet_berry_bush": {
 			priority: 100,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:player_attack": {
 			priority: 140,
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:wind_charge": {
 			priority: 150,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:bad_respawn_point": {
 			priority: 50,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:environment-in_dimension": {
 			priority: 20,
@@ -198,12 +198,12 @@
 		"minecraft:dragon_breath": {
 			priority: 140,
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:hot_floor": {
 			priority: 100,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:in_wall": {
 			priority: 140,
@@ -213,27 +213,27 @@
 		"minecraft:generic": {
 			priority: 150,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:wither_skull": {
 			priority: 130,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:campfire": {
 			priority: 120,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:cramming": {
 			priority: 140,
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:stalagmite": {
 			priority: 140,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:lava": {
 			priority: 140,
@@ -243,7 +243,7 @@
 		"minecraft:freeze": {
 			priority: 100,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:in_fire": {
 			priority: 130,
@@ -253,7 +253,7 @@
 		"minecraft:spit": {
 			priority: 80,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:cactus": {
 			priority: 80,
@@ -263,17 +263,17 @@
 		"minecraft:falling_block": {
 			priority: 1000,
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:thrown": {
 			priority: 100,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:out_of_world": {
 			priority: 150,
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:generic_event": {
 			priority: 1,
@@ -283,16 +283,16 @@
 		"minecraft:falling_stalactite": {
 			priority: 140,
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		},
 		"minecraft:fly_into_wall": {
 			priority: 140,
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: true
 		}
 	},
 	ipAddresses: [
-		"127.0.0.12"
+		"192.168.1.64"
 	],
-	shouldAutoconnect: false
+	shouldAutoconnect: true
 }
