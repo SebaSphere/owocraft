@@ -22,11 +22,6 @@ public class HapticsIconWidget extends AbstractWidget {
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float f) {
 
-        int startX = 16;
-        int startY = 16;
-        int width = 32;
-        int height = 32;
-
         ResourceLocation location = null;
 
         switch (OwocraftClient.getConnectionStateManager().getState()) {
@@ -35,7 +30,7 @@ public class HapticsIconWidget extends AbstractWidget {
             case DISCONNECTED -> location = Owocraft.id("textures/gui/connection/disconnected.png");
         }
 
-        if (mouseX >= startX && mouseY >= startY && mouseX < startX + width && mouseY < startY + height) {
+        if (mouseX >= getX() && mouseY >= getY() && mouseX < getX() + width && mouseY < getY() + height) {
 
             // TODO: make this a translatable
             Component text
@@ -47,7 +42,7 @@ public class HapticsIconWidget extends AbstractWidget {
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0f);
-        guiGraphics.blit(location, 16,16, 32, 32, 32, 32, 32, 32 );
+        guiGraphics.blit(location, getX(), getY(), getWidth(),  getHeight(), 32, 32, 32, 32 );
     }
 
     @Override
