@@ -5,7 +5,6 @@ from dev.sebastianb.owocraft.client.facade import HapticVestInteraction
 
 hapticVestInteraction = HapticVestInteraction()
 
-print("Fallen")
 
 canRun = True
 intensity = 100

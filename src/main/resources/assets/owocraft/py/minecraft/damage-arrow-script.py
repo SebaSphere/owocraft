@@ -8,7 +8,6 @@ muscle_target = random.choice(
 
 hapticVestInteraction = HapticVestInteraction()
 
-print("Arrowed")
 
 canRun = True
 intensity = 100

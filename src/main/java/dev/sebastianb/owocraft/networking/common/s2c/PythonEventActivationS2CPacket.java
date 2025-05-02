@@ -64,7 +64,6 @@ public class PythonEventActivationS2CPacket implements IPacket {
 
     public static void sendPacketToServer(DamageSource damageSource, ServerPlayer serverPlayer, float damage, boolean isEnderpearl) {
         String damageSourceKey = damageSource.typeHolder().getRegisteredName();
-        System.out.println(damageSourceKey);
 
 
 
