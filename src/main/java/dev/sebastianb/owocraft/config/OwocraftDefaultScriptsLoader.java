@@ -5,6 +5,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class OwocraftDefaultScriptsLoader {
 
@@ -16,7 +17,7 @@ public class OwocraftDefaultScriptsLoader {
         Path modContainerPath = FabricLoader.getInstance()
                 .getModContainer("owocraft")
                 .orElseThrow(() -> new RuntimeException("Failed to get mod container"))
-                .getPath("assets/owocraft/py");
+                .findPath("assets/owocraft/py").get();
 
 
         // TODO: 3CHECK THIS
@@ -27,6 +28,7 @@ public class OwocraftDefaultScriptsLoader {
             // Define where you want the config file to be copied
             Path targetPath = FabricLoader.getInstance().getConfigDir()
                     .resolve("owocraft_config.json5"); // TODO: make this dependent on mod id
+
 
             // Check if the config file already exists at the target
             if (!Files.exists(targetPath)) {
@@ -42,7 +44,7 @@ public class OwocraftDefaultScriptsLoader {
 
         // for loop of all .py files inside modContainerPath recursively within folder
         try {
-            Files.walk(modContainerPath)
+            Files.walk(modContainerPath.toAbsolutePath())
                     .filter(Files::isRegularFile)
                     .forEach(filePath -> {
                         if (filePath.toString().endsWith(".py")) {
@@ -57,25 +59,34 @@ public class OwocraftDefaultScriptsLoader {
 
 
     private static void moveDefaultScriptToConfig(Path scriptPath) {
-        Path configPath = FabricLoader.getInstance().getConfigDir()
-                .resolve("owocraft/python/minecraft"); // TODO: make this dependent on mod id
+        Path configDir = FabricLoader.getInstance().getConfigDir()
+                .resolve("owocraft/python/minecraft"); // TODO: make this mod id-dependent
 
-        // check if the filename of scriptPath is inside configPath
-        if (!Files.exists(configPath.resolve(scriptPath.getFileName()))) {
-            // create directories if they don't exist
-            try {
-                Files.createDirectories(configPath);
-            } catch (IOException e) {
-                e.printStackTrace();
+
+
+        try {
+            // Ensure config path exists
+            Files.createDirectories(configDir);
+
+            // Extract just the filename
+            String fileName = scriptPath.getFileName().toString();
+
+            // Convert to default filesystem to avoid provider mismatch
+            Path scriptFileSystemSafe = Paths.get(scriptPath.toUri());
+
+            // Use default filesystem path for target
+            Path targetFile = configDir.resolve(fileName);
+
+            // Only copy if target doesn't exist
+            if (!Files.exists(targetFile)) {
+                Files.copy(scriptFileSystemSafe, targetFile);
+
             }
-            // copy if it doesn't exist
-            try {
-                Files.copy(scriptPath, configPath.resolve(scriptPath.getFileName()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
     }
+
+
 
 }

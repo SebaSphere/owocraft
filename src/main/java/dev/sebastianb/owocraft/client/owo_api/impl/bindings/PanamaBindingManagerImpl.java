@@ -6,11 +6,16 @@ import jdk.jfr.MemoryAddress;
 import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodType;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -138,24 +143,40 @@ public enum PanamaBindingManagerImpl implements PanamaBindingManager {
     @Override
     public void loadDLL() {
         if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
-            var classPath = Owocraft.class.getClassLoader().getResource("libs/OWOCraftLib.dll");
-            if (classPath != null) {
-                System.load(classPath.getPath());
-                Owocraft.getLogger().log(Level.INFO, "Loaded OWOCraftLib.dll successfully");
-            } else {
-                throw new RuntimeException("Could not find OWOCraftLib.dll, something has gone terribly wrong loading OWOCraft.....\n" +
-                        "Contact me@sebastianb.dev with your log - https://sebastianb.dev");
+            try {
+                // Load DLL from JAR
+                String resourcePath = "/libs/OWOCraftLib.dll";
+                InputStream in = Owocraft.class.getResourceAsStream(resourcePath);
+
+                if (in == null) {
+                    throw new RuntimeException("Could not find OWOCraftLib.dll inside JAR at " + resourcePath + "\n" +
+                            "Contact me@sebastianb.dev with your log - https://sebastianb.dev");
+                }
+
+                // Extract to temp file
+                Path tempDir = Files.createTempDirectory("owocraft");
+                Path extractedLib = tempDir.resolve("OWOCraftLib.dll");
+                Files.copy(in, extractedLib, StandardCopyOption.REPLACE_EXISTING);
+                in.close();
+
+                // Load the library
+                System.load(extractedLib.toAbsolutePath().toString());
+                extractedLib.toFile().deleteOnExit();
+
+                Owocraft.getLogger().log(Level.INFO, "Loaded OWOCraftLib.dll successfully from JAR");
+
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to extract and load OWOCraftLib.dll", e);
             }
         } else {
-            // TODO: make a dev config file for this
+            // Load directly from local dev path
             System.load("C:\\Users\\me\\CLionProjects\\OWOCraftLib\\cmake-build-release\\OWOCraftLib.dll");
-
         }
+
         nativeLinker = Linker.nativeLinker();
         stdlibLookup = nativeLinker.defaultLookup();
-        loaderLookup  = SymbolLookup.loaderLookup();
-
-
+        loaderLookup = SymbolLookup.loaderLookup();
     }
+
 
 }
