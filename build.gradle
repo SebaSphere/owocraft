@@ -59,8 +59,6 @@ tasks.withType(JavaExec).configureEach {
 }
 
 dependencies {
-    annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
-
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings loom.officialMojangMappings()
@@ -74,14 +72,9 @@ dependencies {
     include "lol.bai:badpackets:fabric-${badpackets_version}"
     modImplementation "lol.bai:badpackets:fabric-${badpackets_version}"
 
-//    modImplementation "io.wispforest:owo-lib:${project.owo_version}"
-//    include "io.wispforest:owo-sentinel:${project.owo_version}"
-
     modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
 
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
-
-
 }
 
 processResources {
