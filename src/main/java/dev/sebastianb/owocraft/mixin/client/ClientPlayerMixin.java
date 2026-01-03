@@ -24,11 +24,6 @@ import java.util.List;
 @Mixin(LocalPlayer.class)
 public abstract class ClientPlayerMixin extends AbstractClientPlayer {
 
-
-    @Shadow public abstract boolean isUnderWater();
-
-    @Shadow protected abstract boolean isMoving();
-
     public ClientPlayerMixin(ClientLevel clientLevel, GameProfile gameProfile) {
         super(clientLevel, gameProfile);
     }
