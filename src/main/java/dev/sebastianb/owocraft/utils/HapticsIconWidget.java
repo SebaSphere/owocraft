@@ -1,5 +1,8 @@
 package dev.sebastianb.owocraft.utils;
 
+import com.mojang.blaze3d.pipeline.BlendFunction;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.platform.DepthTestFunction;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.sebastianb.owocraft.Owocraft;
 import dev.sebastianb.owocraft.client.OwocraftClient;
@@ -7,10 +10,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class HapticsIconWidget extends AbstractWidget {
@@ -21,7 +31,6 @@ public class HapticsIconWidget extends AbstractWidget {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float f) {
-
         ResourceLocation location = null;
 
         switch (OwocraftClient.getConnectionStateManager().getState()) {
@@ -37,12 +46,10 @@ public class HapticsIconWidget extends AbstractWidget {
                     = Component.literal("Connection status: "
                                         + OwocraftClient.getConnectionStateManager().getState().name().toLowerCase(Locale.ROOT)
             );
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, text, mouseX, mouseY);
+            guiGraphics.setComponentTooltipForNextFrame(Minecraft.getInstance().font, text.toFlatList(), mouseX, mouseY);
         }
-        RenderSystem.enableBlend();
-        RenderSystem.enableDepthTest();
-        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0f);
-        guiGraphics.blit(location, getX(), getY(), getWidth(),  getHeight(), 32, 32, 32, 32 );
+
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, location, getX(), getY(), 1.0f, 1.0f, getWidth(), getHeight(), 32, 32);
     }
 
     @Override
@@ -51,7 +58,7 @@ public class HapticsIconWidget extends AbstractWidget {
     }
 
     @Override
-    protected boolean clicked(double d, double e) {
+    public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean bl) {
         return false;
     }
 

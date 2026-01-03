@@ -9,14 +9,15 @@ import lol.bai.badpackets.api.PacketReceiver;
 import lol.bai.badpackets.api.PacketSender;
 import lol.bai.badpackets.api.play.ClientPlayContext;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.CauldronBlock;
 import org.jetbrains.annotations.NotNull;
@@ -80,7 +81,7 @@ public class PythonEventActivationS2CPacket implements IPacket {
         buf.writeUtf(damageEntity);
 
         if (damageSource.getWeaponItem() != null) {
-            if (damageSource.getWeaponItem().getItem() instanceof SwordItem) {
+            if (damageSource.getWeaponItem().getTags().toList().contains(ItemTags.SWORDS)) {
                 buf.writeUtf("sword");
             } else if (damageSource.getWeaponItem().getItem() instanceof AxeItem) {
                 buf.writeUtf("axe");
