@@ -7,7 +7,7 @@ import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import dev.sebastianb.owocraft.client.OwocraftClient;
 import dev.sebastianb.owocraft.client.owo_api.impl.bindings.python.PythonScriptInformation;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 public class OwocraftConfig {
 
     public static ConfigClassHandler<OwocraftConfig> HANDLER = ConfigClassHandler.createBuilder(OwocraftConfig.class)
-            .id(ResourceLocation.fromNamespaceAndPath("owocraft", "owocraft_config"))
+            .id(Identifier.fromNamespaceAndPath("owocraft", "owocraft_config"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(FabricLoader.getInstance().getConfigDir().resolve("owocraft_config.json5"))
                     .appendGsonBuilder(builder -> builder.setPrettyPrinting().serializeNulls()) // serialize nulls
