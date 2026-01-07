@@ -3,6 +3,7 @@ package dev.sebastianb.owocraft.mixin;
 import com.mojang.authlib.GameProfile;
 import dev.sebastianb.owocraft.networking.common.s2c.PythonEventActivationS2CPacket;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -20,14 +21,14 @@ import java.util.Objects;
 public abstract class ServerPlayerMixin extends Player {
 
 
-    public ServerPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
-        super(level, blockPos, f, gameProfile);
+    public ServerPlayerMixin(Level level, GameProfile gameProfile) {
+        super(level, gameProfile);
     }
 
-    @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
-    private void onHurt(DamageSource damageSource, float f, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
+    private void onHurt(ServerLevel serverLevel, DamageSource damageSource, float f, CallbackInfoReturnable<Boolean> cir) {
 
-        if (!level().isClientSide && !isDeadOrDying()) {
+        if (!serverLevel.isClientSide() && !isDeadOrDying()) {
             if (this.fallDistance == 0 && damageSources().fall().equals(damageSource)) {
                 // should handle ender pearl
                 PythonEventActivationS2CPacket.sendPacketToServer(damageSource, (ServerPlayer) (Object) this, f, true);

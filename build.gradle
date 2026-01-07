@@ -1,11 +1,6 @@
 plugins {
-    id 'cpp-application' // or 'cpp-library'
-    id 'fabric-loom' version '1.8-SNAPSHOT'
+	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
     id 'maven-publish'
-}
-
-application {
-    targetMachines.add(machines.windows.x86_64)
 }
 
 version = project.mod_version
@@ -31,7 +26,6 @@ loom {
         }
     }
     accessWidenerPath = file("src/main/resources/owocraft.accesswidener")
-
 }
 
 repositories {

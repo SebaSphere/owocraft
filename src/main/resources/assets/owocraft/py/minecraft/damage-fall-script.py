@@ -1,10 +1,9 @@
 import time
 from dev.sebastianb.owocraft.client.facade import HapticVestInteraction
 
-
-
 hapticVestInteraction = HapticVestInteraction()
 
+scaleFromDamage = True
 
 canRun = True
 intensity = 100
@@ -21,6 +20,8 @@ while canRun:
 
     # Linearly scale intensity based on elapsed time
     intensity = max(0, 100 - (elapsed_time / duration) * 100)
+    if scaleFromDamage:
+        intensity *= min(max(damage * 0.2, 0.4), 1.0)
 
     # Run the haptic sensation with updated intensity
     canRun = hapticVestInteraction.runSensation("100,0.1,{:.2f},0,0,0,Impact".format(intensity), "Abdominal_R,Abdominal_L,Lumbar_R,Lumbar_L")
