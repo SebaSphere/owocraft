@@ -95,6 +95,11 @@
 			should_finish_event_first: true,
 			run_generic_event_instead: false
 		},
+		"minecraft:spear": {
+			priority: 140,
+			should_finish_event_first: true,
+			run_generic_event_instead: false
+		},
 		"minecraft:magic": {
 			priority: 100,
 			should_finish_event_first: false,
