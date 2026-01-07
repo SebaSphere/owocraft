@@ -20,7 +20,7 @@
       "dev.sebastianb.owocraft.integration.ModMenuIntegration"
     ]
   },
-  "accessWidener" : "owocraft.accesswidener",
+  "accessWidener" : "owocraft.classtweaker",
   "mixins": [
     "owocraft.mixins.json"
   ],

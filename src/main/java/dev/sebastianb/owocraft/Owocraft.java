@@ -2,7 +2,7 @@ package dev.sebastianb.owocraft;
 
 import dev.sebastianb.owocraft.networking.OCPackets;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.logging.Logger;
 
@@ -15,8 +15,8 @@ public class Owocraft implements ModInitializer {
     }
 
 
-    public static ResourceLocation id(String location) {
-        return ResourceLocation.fromNamespaceAndPath("owocraft", location);
+    public static Identifier id(String location) {
+        return Identifier.fromNamespaceAndPath("owocraft", location);
     }
 
     @Override

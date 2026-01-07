@@ -24,11 +24,6 @@ import java.util.List;
 @Mixin(LocalPlayer.class)
 public abstract class ClientPlayerMixin extends AbstractClientPlayer {
 
-
-    @Shadow public abstract boolean isUnderWater();
-
-    @Shadow protected abstract boolean isMoving();
-
     public ClientPlayerMixin(ClientLevel clientLevel, GameProfile gameProfile) {
         super(clientLevel, gameProfile);
     }
@@ -97,7 +92,7 @@ public abstract class ClientPlayerMixin extends AbstractClientPlayer {
                     new PairedVariableArgument("playerSpeed", getDeltaMovement().distanceTo(Vec3.ZERO))
             );
         }
-        String playerDimension = this.level().dimension().location().toString();
+        String playerDimension = this.level().dimension().identifier().toString();
         // check if player is in nether portal
         if (this.portalProcess != null) {
             if (this.portalProcess.isInsidePortalThisTick()) {

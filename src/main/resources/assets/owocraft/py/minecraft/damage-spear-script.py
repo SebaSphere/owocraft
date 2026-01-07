@@ -1,9 +1,11 @@
 import time
+import random
 from dev.sebastianb.owocraft.client.facade import HapticVestInteraction
 
-hapticVestInteraction = HapticVestInteraction()
+muscle_target = random.choice(
+    ["Pectoral_R,Dorsal_R", "Pectoral_L,Dorsal_L", "Abdominal_R,Lumbar_R", "Abdominal_L,Lumbar_L"])
 
-scaleFromDamage = True
+hapticVestInteraction = HapticVestInteraction()
 
 canRun = True
 intensity = 100
@@ -12,7 +14,7 @@ intensity = 100
 start_time = time.time()
 
 # Duration in seconds
-duration = 2.0
+duration = 0.3
 
 while canRun:
     # Calculate elapsed time
@@ -20,11 +22,9 @@ while canRun:
 
     # Linearly scale intensity based on elapsed time
     intensity = max(0, 100 - (elapsed_time / duration) * 100)
-    if scaleFromDamage:
-        intensity *= min(max(damage * 0.2, 0.4), 1.0)
 
     # Run the haptic sensation with updated intensity
-    canRun = hapticVestInteraction.runSensation("100,0.1,{:.2f},0,0,0,Impact".format(intensity), "Abdominal_R,Abdominal_L,Lumbar_R,Lumbar_L")
+    canRun = hapticVestInteraction.runSensation("100,0.1,{:.2f},0,0,0,Impact".format(intensity), muscle_target)
 
     # Break the loop if the duration has passed
     if elapsed_time > duration:

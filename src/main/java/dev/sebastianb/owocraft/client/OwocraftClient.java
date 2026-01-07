@@ -72,10 +72,10 @@ public class OwocraftClient implements ClientModInitializer {
                 ResourceKey<DamageType> resourceKey = (ResourceKey<DamageType>) field.get(null);
 
                 pythonRunnerManager.initPythonScriptPath(
-                        resourceKey.location().getNamespace(), // mod id
-                        "damage-" + resourceKey.location().getPath() + "-script.py", // python path
-                        resourceKey.location().getPath(), // event name
-                        (int) resourceKey.location().getPath().toCharArray()[0] // priority based off first letter, just for default config
+                        resourceKey.identifier().getNamespace(), // mod id
+                        "damage-" + resourceKey.identifier().getPath() + "-script.py", // python path
+                        resourceKey.identifier().getPath(), // event name
+                        (int) resourceKey.identifier().getPath().toCharArray()[0] // priority based off first letter, just for default config
                 );
 
             } catch (IllegalAccessException e) {
