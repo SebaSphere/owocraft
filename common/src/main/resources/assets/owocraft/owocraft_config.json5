@@ -1,299 +1,526 @@
 {
 	pythonConfigInformation: {
 		"minecraft:event-speed": {
-			priority: 30,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport math\r\n\r\nmuscle_target = \"Arm_R,Arm_L,Dorsal_R,Dorsal_L,Lumbar_R,Lumbar_L\"\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\nstart_time = time.time()\r\n\r\nduration = 0.3\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # the 0.8 is relevant because it's the hardcoded speed when sensations should start\r\n    intensity = (playerSpeed * 2 - (0.8 + 0.1)) * 20\r\n\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "event-speed-script.py",
+			priority: 38,
+			event_name: "event-speed",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:fireworks": {
+			script: "",
+			script_name: "damage-fireworks-script.py",
 			priority: 102,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			event_name: "fireworks",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:thorns": {
-			priority: 50,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-thorns-script.py",
+			priority: 116,
+			event_name: "thorns",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:event-drinking": {
-			priority: 40,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport math\r\n\r\nmuscle_target = \"Abdominal_R,Abdominal_L,Dorsal_R,Dorsal_L,Lumbar_R,Lumbar_L\"\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\nstart_time = time.time()\r\n\r\nduration = 0.5\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Calculate the result of cos wave\r\n    intensity = math.cos(playerAge / 20) * 4 + 40\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "event-drinking-script.py",
+			priority: 13,
+			event_name: "event-drinking",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:lightning_bolt": {
-			priority: 120,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-lightning_bolt-script.py",
+			priority: 108,
+			event_name: "lightning_bolt",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:mob_attack": {
-			priority: 50,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport random\r\n\r\n\r\ndef run_haptic_vest_interaction_large_hands():\r\n\r\n    muscles = \"Pectoral_R,Pectoral_L\", \"Arm_R,Arm_L\", \"Dorsal_R,Dorsal_L\"\r\n    hapticVestInteraction = HapticVestInteraction()\r\n\r\n    canRun = True\r\n\r\n    # Record the start time\r\n    start_time = time.time()\r\n\r\n    # Duration in seconds\r\n    duration = 0.5\r\n\r\n    random_muscle = random.choice(muscles)\r\n\r\n    while canRun:\r\n        # Calculate elapsed time\r\n        elapsed_time = time.time() - start_time\r\n\r\n        # Linearly scale intensity based on elapsed time\r\n        intensity = max(0, 70 - (elapsed_time / duration) * 70)\r\n\r\n        # Run the haptic sensation with updated intensity\r\n        canRun = hapticVestInteraction.runSensation(\r\n            \"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), random_muscle\r\n        )\r\n\r\n        # Break the loop if the duration has passed\r\n        if elapsed_time > duration:\r\n            canRun = False\r\n\r\n        time.sleep(0.1)  # run 10 times a second\r\n\r\ndef run_haptic_vest_interaction_slash():\r\n    upper_body_muscles = \"Pectoral_R,Pectoral_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L\"\r\n    lower_body_muscles = \"Abdominal_R,Abdominal_L,Lumbar_R,Lumbar_L\"\r\n\r\n    muscle_target = upper_body_muscles\r\n\r\n    hapticVestInteraction = HapticVestInteraction()\r\n\r\n    canRun = True\r\n\r\n    start_time = time.time()\r\n\r\n    duration = 0.7\r\n\r\n    while canRun:\r\n        # Calculate elapsed time\r\n        elapsed_time = time.time() - start_time\r\n\r\n        # Set the initial and final intensities and the total time for the transition\r\n        initial_intensity = 50\r\n        final_intensity = 20\r\n        total_transition_time = 0.3\r\n\r\n        # Check if the elapsed time is within the transition period\r\n        if 0 <= elapsed_time <= total_transition_time:\r\n            # Apply the linear interpolation formula\r\n            intensity = initial_intensity - ((elapsed_time / total_transition_time) * (initial_intensity - final_intensity))\r\n            muscle_target = upper_body_muscles\r\n        elif 0.3 <= elapsed_time <= 0.7:\r\n            initial_intensity_2 = 30\r\n            final_intensity_2 = 0\r\n            total_transition_time_2 = 0.7 - 0.3\r\n\r\n            intensity = initial_intensity_2 - ((elapsed_time - 0.3) / total_transition_time_2) * (\r\n                    initial_intensity_2 - final_intensity_2)\r\n            muscle_target = lower_body_muscles\r\n        else:\r\n            intensity = 0\r\n\r\n        canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n        # Break the loop if the duration has passed\r\n        if elapsed_time > duration:\r\n            canRun = False\r\n\r\n        time.sleep(0.1)  # run 10 times a second\r\n\r\ndef run_haptic_vest_interaction_hands():\r\n\r\n    muscles = \"Pectoral_R,Pectoral_L\", \"Arm_R,Arm_L\", \"Dorsal_R,Dorsal_L\"\r\n    hapticVestInteraction = HapticVestInteraction()\r\n\r\n    canRun = True\r\n\r\n    # Record the start time\r\n    start_time = time.time()\r\n\r\n    # Duration in seconds\r\n    duration = 0.5\r\n\r\n    random_muscle = random.choice(muscles)\r\n\r\n    while canRun:\r\n        # Calculate elapsed time\r\n        elapsed_time = time.time() - start_time\r\n\r\n        # Linearly scale intensity based on elapsed time\r\n        intensity = max(0, 40 - (elapsed_time / duration) * 40)\r\n\r\n        # Run the haptic sensation with updated intensity\r\n        canRun = hapticVestInteraction.runSensation(\r\n            \"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), random_muscle\r\n        )\r\n\r\n        # Break the loop if the duration has passed\r\n        if elapsed_time > duration:\r\n            canRun = False\r\n\r\n        time.sleep(0.1)  # run 10 times a second\r\n\r\n\r\nif damageFromEntityType in [\"entity.minecraft.warden\", \"entity.minecraft.iron_golem\", \"entity.minecraft.ender_dragon\"]:\r\n    run_haptic_vest_interaction_large_hands()\r\nelse:\r\n    if weaponType in [\"sword\", \"axe\"]:\r\n        run_haptic_vest_interaction_slash()\r\n    else:\r\n        run_haptic_vest_interaction_hands()\r\n",
+			script_name: "damage-mob_attack-script.py",
+			priority: 109,
+			event_name: "mob_attack",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:indirect_magic": {
-			priority: 100,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "",
+			script_name: "damage-indirect_magic-script.py",
+			priority: 105,
+			event_name: "indirect_magic",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:outside_border": {
-			priority: 100,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-outside_border-script.py",
+			priority: 111,
+			event_name: "outside_border",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:environment-played_sound": {
-			priority: 30,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport random\r\n\r\n# print(worldAge)\r\n\r\n\r\ndef run_haptic_vest_interaction_skulk_click():\r\n    upper_body_muscles = \"Pectoral_R,Pectoral_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L\"\r\n    lower_body_muscles = \"Abdominal_R,Abdominal_L,Lumbar_R,Lumbar_L\"\r\n\r\n    hapticVestInteraction = HapticVestInteraction()\r\n\r\n    start_time = time.time()\r\n    duration = 4  # Total duration remains 4\r\n\r\n    while True:\r\n        # Calculate elapsed time\r\n        elapsed_time = time.time() - start_time\r\n\r\n        intensity = max(0, 30 - (elapsed_time / duration) * 30)\r\n\r\n        if elapsed_time <= 0.5:\r\n            # First impact on lower back\r\n            muscle_target = \"Lumbar_R,Lumbar_L\"\r\n            hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n        elif 0.5 < elapsed_time <= 1:\r\n            intensity = max(0, 30 - ((elapsed_time) / 0.5) * 30)\r\n\r\n            # Second impact on lower back\r\n            muscle_target = \"Lumbar_R,Lumbar_L\"\r\n            hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n        elif 1 < elapsed_time <= 1.5:\r\n            intensity = max(0, 30 - ((elapsed_time - 0.5) / 1) * 30)\r\n            # First impact on upper back\r\n            muscle_target = \"Dorsal_R,Dorsal_L\"\r\n            hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n        elif 1.5 < elapsed_time <= 2:\r\n            intensity = max(0, 30 - ((elapsed_time - 1) / 1.5) * 30)\r\n            # Second impact on upper back\r\n            muscle_target = \"Dorsal_R,Dorsal_L\"\r\n            hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n        time.sleep(0.1)  # run 10 times a second\r\n\r\n        # Break the loop if the duration has passed\r\n        if elapsed_time > duration:\r\n            break\r\n\r\n\r\nif soundEventName == \"minecraft:block.sculk_sensor.clicking\":\r\n    run_haptic_vest_interaction_skulk_click()\r\n",
+			script_name: "environment-played_sound-script.py",
+			priority: 26,
+			event_name: "environment-played_sound",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:arrow": {
-			priority: 120,
+			script: "import time\r\nimport random\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\n\r\nmuscle_target = random.choice(\r\n    [\"Pectoral_R\", \"Pectoral_L\", \"Abdominal_R\", \"Abdominal_L\", \"Arm_R\", \"Arm_L\", \"Dorsal_R\", \"Dorsal_L\", \"Lumbar_R\",\r\n     \"Lumbar_L\"])\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\n\r\ncanRun = True\r\nintensity = 100\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 1.2\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Linearly scale intensity based on elapsed time\r\n    intensity = max(0, 100 - (elapsed_time / duration) * 100)\r\n\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "damage-arrow-script.py",
+			priority: 97,
+			event_name: "arrow",
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:explosion": {
-			priority: 130,
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport math\r\n\r\nmuscle_target = \"Pectoral_R,Pectoral_L,Abdominal_R,Abdominal_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L,Lumbar_R,Lumbar_L\"\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\nstart_time = time.time()\r\n\r\nduration = 2\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n\r\n    # make it so intensity goes up and down twice\r\n    intensity = 0\r\n    # Set the initial and final intensities and the total time for the transition\r\n    initial_intensity = 60\r\n    final_intensity = 20\r\n    total_transition_time = 0.7\r\n\r\n    # Check if the elapsed time is within the transition period\r\n    if 0 <= elapsed_time <= total_transition_time:\r\n        # Apply the linear interpolation formula\r\n        intensity = initial_intensity - ((elapsed_time / total_transition_time) * (initial_intensity - final_intensity))\r\n\r\n    elif 0.7 <= elapsed_time <= 2:\r\n        initial_intensity_2 = 20\r\n        final_intensity_2 = 0\r\n        total_transition_time_2 = 2 - 0.7\r\n\r\n        intensity = initial_intensity_2 - ((elapsed_time - 0.7) / total_transition_time_2) * (\r\n                initial_intensity_2 - final_intensity_2)\r\n    else:\r\n        intensity = 0\r\n\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "damage-explosion-script.py",
+			priority: 101,
+			event_name: "explosion",
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:dry_out": {
+			script: "",
+			script_name: "damage-dry_out-script.py",
 			priority: 100,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			event_name: "dry_out",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:wither": {
-			priority: 100,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nimport random\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\n\r\nmuscles = [\"Pectoral_R\", \"Pectoral_L\", \"Abdominal_R\", \"Abdominal_L\", \"Arm_R\", \"Arm_L\", \"Dorsal_R\", \"Dorsal_L\", \"Lumbar_R\",\r\n           \"Lumbar_L\"]\r\n\r\nmuscle_target_one = random.choice(muscles)\r\nmuscles.remove(muscle_target_one)\r\nmuscle_target_one += \",\" + random.choice(muscles)\r\nmuscles.remove(muscle_target_one.split(\",\")[-1])\r\nmuscle_target_one += \",\" + random.choice(muscles)\r\n\r\nmuscle_target_two = random.choice(muscles)\r\nmuscles.remove(muscle_target_two)\r\nmuscle_target_two += \",\" + random.choice(muscles)\r\nmuscles.remove(muscle_target_two.split(\",\")[-1])\r\nmuscle_target_two += \",\" + random.choice(muscles)\r\n\r\nmuscle_target_three = random.choice(muscles)\r\nmuscles.remove(muscle_target_three)\r\nmuscle_target_three += \",\" + random.choice(muscles)\r\nmuscles.remove(muscle_target_three.split(\",\")[-1])\r\nmuscle_target_three += \",\" + random.choice(muscles)\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\nintensity = 100\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 0.9\r\n\r\nwhile canRun:\r\n    elapsed_time = time.time() - start_time\r\n\r\n\r\n\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n    if elapsed_time > 0.6:\r\n        intensity = max(0, 60 - (elapsed_time - 0.6 / duration - 0.6) * 60)\r\n        canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target_three)\r\n    if elapsed_time > 0.3:\r\n        intensity = max(0, 60 - (elapsed_time - 0.3 / duration - 0.3) * 60)\r\n        canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target_two)\r\n    elif elapsed_time > 0:\r\n        intensity = max(0, 60 - (elapsed_time / duration - 0.6) * 60)\r\n        canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target_one)\r\n\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "damage-wither-script.py",
+			priority: 119,
+			event_name: "wither",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:ender_pearl_thrown": {
-			priority: 150,
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport random\r\n\r\n\r\ndef run_haptic_vest_interaction_pearl():\r\n    all_muscles = \"Pectoral_R,Pectoral_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L,Abdominal_R,Abdominal_L,Lumbar_R,Lumbar_L\"\r\n\r\n    muscle_target = all_muscles\r\n\r\n    hapticVestInteraction = HapticVestInteraction()\r\n\r\n    canRun = True\r\n\r\n    start_time = time.time()\r\n\r\n    duration = 0.7\r\n\r\n    while canRun:\r\n        # Calculate elapsed time\r\n        elapsed_time = time.time() - start_time\r\n\r\n        # Set the initial and final intensities and the total time for the transition\r\n        initial_intensity = 50\r\n        final_intensity = 0\r\n        total_transition_time = 0.5\r\n\r\n        # Check if the elapsed time is within the transition period\r\n        if 0 <= elapsed_time <= total_transition_time:\r\n            # Apply the linear interpolation formula\r\n            intensity = initial_intensity - ((elapsed_time / total_transition_time) * (initial_intensity - final_intensity))\r\n            muscle_target = all_muscles\r\n        elif 0.5 <= elapsed_time <= 1:\r\n            initial_intensity_2 = 30\r\n            final_intensity_2 = 0\r\n            total_transition_time_2 = 1 - 0.5\r\n\r\n            intensity = initial_intensity_2 - ((elapsed_time - 0.5) / total_transition_time_2) * (\r\n                    initial_intensity_2 - final_intensity_2)\r\n            muscle_target = all_muscles\r\n        else:\r\n            intensity = 0\r\n\r\n        canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n        # Break the loop if the duration has passed\r\n        if elapsed_time > duration:\r\n            canRun = False\r\n\r\n        time.sleep(0.1)  # run 10 times a second\r\n\r\nrun_haptic_vest_interaction_pearl()",
+			script_name: "event-ender_pearl_thrown-script.py",
+			priority: 37,
+			event_name: "ender_pearl_thrown",
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:trident": {
-			priority: 100,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-trident-script.py",
+			priority: 116,
+			event_name: "trident",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:unattributed_fireball": {
-			priority: 130,
+			script: "",
+			script_name: "damage-unattributed_fireball-script.py",
+			priority: 117,
+			event_name: "unattributed_fireball",
 			should_finish_event_first: true,
-			run_generic_event_instead: true
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:falling_anvil": {
-			priority: 140,
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport random\r\n\r\n\r\nmuscles = \"Pectoral_R,Pectoral_L\", \"Arm_R,Arm_L\", \"Dorsal_R,Dorsal_L\"\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 0.9\r\n\r\nrandom_muscle = random.choice(muscles)\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Linearly scale intensity based on elapsed time\r\n    intensity = max(0, 70 - (elapsed_time / duration) * 70)\r\n\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\r\n        \"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), random_muscle\r\n    )\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "damage-falling_anvil-script.py",
+			priority: 102,
+			event_name: "falling_anvil",
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:fireball": {
-			priority: 130,
+			script: "",
+			script_name: "damage-fireball-script.py",
+			priority: 102,
+			event_name: "fireball",
 			should_finish_event_first: true,
-			run_generic_event_instead: true
-		},
-		"minecraft:mace_smash": {
-			priority: 140,
-			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:magic": {
-			priority: 100,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nimport random\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\n\r\nmuscles = [\"Pectoral_R\", \"Pectoral_L\", \"Abdominal_R\", \"Abdominal_L\", \"Arm_R\", \"Arm_L\", \"Dorsal_R\", \"Dorsal_L\", \"Lumbar_R\",\r\n           \"Lumbar_L\"]\r\n\r\nmuscle_target_one = random.choice(muscles)\r\nmuscles.remove(muscle_target_one)\r\nmuscle_target_one += \",\" + random.choice(muscles)\r\nmuscles.remove(muscle_target_one.split(\",\")[-1])\r\nmuscle_target_one += \",\" + random.choice(muscles)\r\n\r\nmuscle_target_two = random.choice(muscles)\r\nmuscles.remove(muscle_target_two)\r\nmuscle_target_two += \",\" + random.choice(muscles)\r\nmuscles.remove(muscle_target_two.split(\",\")[-1])\r\nmuscle_target_two += \",\" + random.choice(muscles)\r\n\r\nmuscle_target_three = random.choice(muscles)\r\nmuscles.remove(muscle_target_three)\r\nmuscle_target_three += \",\" + random.choice(muscles)\r\nmuscles.remove(muscle_target_three.split(\",\")[-1])\r\nmuscle_target_three += \",\" + random.choice(muscles)\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\nintensity = 100\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 0.9\r\n\r\nwhile canRun:\r\n    elapsed_time = time.time() - start_time\r\n\r\n\r\n\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n    if elapsed_time > 0.6:\r\n        intensity = max(0, 30 - (elapsed_time - 0.6 / duration - 0.6) * 30)\r\n        canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target_three)\r\n    if elapsed_time > 0.3:\r\n        intensity = max(0, 30 - (elapsed_time - 0.3 / duration - 0.3) * 30)\r\n        canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target_two)\r\n    elif elapsed_time > 0:\r\n        intensity = max(0, 30 - (elapsed_time / duration - 0.6) * 30)\r\n        canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target_one)\r\n\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "damage-magic-script.py",
+			priority: 109,
+			event_name: "magic",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:event-gained_experience": {
-			priority: 30,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport math\r\n\r\n# Only lower body\r\nmuscle_target = \"Abdominal_R,Abdominal_L,Dorsal_R,Dorsal_L,Lumbar_R,Lumbar_L\"\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 2.0\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Calculate the result of cos wave\r\n    intensity = math.cos(playerAge / 20) * 4 + 20\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "event-gained_experience-script.py",
+			priority: 7,
+			event_name: "event-gained_experience",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:environment-raining": {
-			priority: 20,
+			script: "import time\r\nimport random\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\n\r\nmuscles = [\"Pectoral_R\", \"Pectoral_L\", \"Arm_R\", \"Arm_L\", \"Dorsal_R\", \"Dorsal_L\"]\r\n\r\nmuscle_target_one = random.choice(muscles)\r\nmuscles.remove(muscle_target_one)\r\nmuscle_target_one += \",\" + random.choice(muscles)\r\n# muscles.remove(muscle_target_one.split(\",\")[-1])\r\n# muscle_target_one += \",\" + random.choice(muscles)\r\n\r\nmuscle_target_two = random.choice(muscles)\r\nmuscles.remove(muscle_target_two)\r\nmuscle_target_two += \",\" + random.choice(muscles)\r\n# muscles.remove(muscle_target_two.split(\",\")[-1])\r\n# muscle_target_two += \",\" + random.choice(muscles)\r\n\r\nmuscle_target_three = random.choice(muscles)\r\nmuscles.remove(muscle_target_three)\r\nmuscle_target_three += \",\" + random.choice(muscles)\r\n# muscles.remove(muscle_target_three.split(\",\")[-1])\r\n# muscle_target_three += \",\" + random.choice(muscles)\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\nintensity = 15\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 0.9\r\n\r\nwhile canRun:\r\n    elapsed_time = time.time() - start_time\r\n\r\n\r\n\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n    if elapsed_time > 0.6:\r\n        intensity = max(0, 15 - (elapsed_time - 0.6 / duration - 0.6) * 15)\r\n        canRun = hapticVestInteraction.runSensation(\"50,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target_three)\r\n    if elapsed_time > 0.3:\r\n        intensity = max(0, 15 - (elapsed_time - 0.3 / duration - 0.3) * 15)\r\n        canRun = hapticVestInteraction.runSensation(\"50,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target_two)\r\n    elif elapsed_time > 0:\r\n        intensity = max(0, 15 - (elapsed_time / duration - 0.6) * 15)\r\n        canRun = hapticVestInteraction.runSensation(\"50,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target_one)\r\n\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "environment-raining-script.py",
+			priority: 38,
+			event_name: "environment-raining",
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:sting": {
-			priority: 80,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-sting-script.py",
+			priority: 115,
+			event_name: "sting",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:drown": {
-			priority: 20,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport math\r\n\r\nmuscle_target = \"Pectoral_R,Pectoral_L,Abdominal_R,Abdominal_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L,Lumbar_R,Lumbar_L\"\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\nstart_time = time.time()\r\n\r\nduration = 1\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n\r\n    # make it so intensity goes up and down twice\r\n    intensity = 0\r\n    # Set the initial and final intensities and the total time for the transition\r\n    initial_intensity = 20\r\n    final_intensity = 10\r\n    total_transition_time = 0.4\r\n\r\n    # Check if the elapsed time is within the transition period\r\n    if 0 <= elapsed_time <= total_transition_time:\r\n        # Apply the linear interpolation formula\r\n        intensity = initial_intensity - ((elapsed_time / total_transition_time) * (initial_intensity - final_intensity))\r\n\r\n    elif 0.4 <= elapsed_time <= 0.8:\r\n        initial_intensity_2 = 20\r\n        final_intensity_2 = 10\r\n        total_transition_time_2 = 0.8 - 0.4\r\n\r\n        intensity = initial_intensity_2 - ((elapsed_time - 0.4) / total_transition_time_2) * (\r\n                    initial_intensity_2 - final_intensity_2)\r\n    else:\r\n        intensity = 0\r\n\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "damage-drown-script.py",
+			priority: 100,
+			event_name: "drown",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:generic_kill": {
-			priority: 150,
+			script: "",
+			script_name: "damage-generic_kill-script.py",
+			priority: 103,
+			event_name: "generic_kill",
 			should_finish_event_first: true,
-			run_generic_event_instead: true
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:event-guardian_target": {
-			priority: 50,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport math\r\n\r\nmuscle_target = \"Pectoral_R,Pectoral_L,Abdominal_R,Abdominal_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L,Lumbar_R,Lumbar_L\"\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\nstart_time = time.time()\r\n\r\nduration = 0.5\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Calculate the result of cos wave\r\n    intensity = math.cos(playerAge / 20) * 4 + 30\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "event-guardian_target-script.py",
+			priority: 20,
+			event_name: "event-guardian_target",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:event-in_portal": {
-			priority: 25,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport math\r\n\r\nmuscle_target = \"Pectoral_R,Pectoral_L,Abdominal_R,Abdominal_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L,Lumbar_R,Lumbar_L\"\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\nstart_time = time.time()\r\n\r\nduration = 0.3\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Calculate the result of cos wave\r\n    intensity = math.cos(playerAge / 20) * 4 + 40\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "event-in_portal-script.py",
+			priority: 49,
+			event_name: "event-in_portal",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:player_explosion": {
-			priority: 140,
+			script: "",
+			script_name: "damage-player_explosion-script.py",
+			priority: 112,
+			event_name: "player_explosion",
 			should_finish_event_first: true,
-			run_generic_event_instead: true
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:mob_projectile": {
-			priority: 100,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-mob_projectile-script.py",
+			priority: 109,
+			event_name: "mob_projectile",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:mob_attack_no_aggro": {
-			priority: 100,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-mob_attack_no_aggro-script.py",
+			priority: 109,
+			event_name: "mob_attack_no_aggro",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:environment-underwater": {
-			priority: 20,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport math\r\n\r\nmuscle_target = \"Pectoral_R,Pectoral_L,Abdominal_R,Abdominal_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L,Lumbar_R,Lumbar_L\"\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 0.5\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Calculate the result of cos wave\r\n    intensity = math.cos(playerAge / 20) * 4 + 20\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "environment-underwater-script.py",
+			priority: 12,
+			event_name: "environment-underwater",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:sonic_boom": {
-			priority: 140,
+			script: "",
+			script_name: "damage-sonic_boom-script.py",
+			priority: 115,
+			event_name: "sonic_boom",
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:on_fire": {
-			priority: 80,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\n\r\n# This has regenerated\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 0.3\r\n\r\nmuscle_target = \"Abdominal_R,Abdominal_L,Lumbar_R,Lumbar_L\"\r\n\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Linearly scale intensity based on elapsed time\r\n    intensity = max(20, 30 - (elapsed_time / duration) * 30)\r\n\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second\r\n",
+			script_name: "damage-on_fire-script.py",
+			priority: 111,
+			event_name: "on_fire",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:starve": {
-			priority: 60,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-starve-script.py",
+			priority: 115,
+			event_name: "starve",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:fall": {
-			priority: 140,
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\nscaleFromDamage = False\r\n\r\ncanRun = True\r\nintensity = 100\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 2.0\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Linearly scale intensity based on elapsed time\r\n    intensity = max(0, 100 - (elapsed_time / duration) * 100)\r\n    if scaleFromDamage:\r\n        intensity *= min(max(damage * 0.2, 0.4), 1.0)\r\n\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), \"Abdominal_R,Abdominal_L,Lumbar_R,Lumbar_L\")\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "damage-fall-script.py",
+			priority: 102,
+			event_name: "fall",
 			should_finish_event_first: false,
-			run_generic_event_instead: false
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:sweet_berry_bush": {
-			priority: 100,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-sweet_berry_bush-script.py",
+			priority: 115,
+			event_name: "sweet_berry_bush",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:player_attack": {
-			priority: 140,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport random\r\n\r\ndef run_haptic_vest_interaction_slash():\r\n    upper_body_muscles = \"Pectoral_R,Pectoral_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L\"\r\n    lower_body_muscles = \"Abdominal_R,Abdominal_L,Lumbar_R,Lumbar_L\"\r\n\r\n    muscle_target = upper_body_muscles\r\n\r\n    hapticVestInteraction = HapticVestInteraction()\r\n\r\n    canRun = True\r\n\r\n    start_time = time.time()\r\n\r\n    duration = 0.7\r\n\r\n    while canRun:\r\n        # Calculate elapsed time\r\n        elapsed_time = time.time() - start_time\r\n\r\n        # Set the initial and final intensities and the total time for the transition\r\n        initial_intensity = 50\r\n        final_intensity = 20\r\n        total_transition_time = 0.3\r\n\r\n        # Check if the elapsed time is within the transition period\r\n        if 0 <= elapsed_time <= total_transition_time:\r\n            # Apply the linear interpolation formula\r\n            intensity = initial_intensity - ((elapsed_time / total_transition_time) * (initial_intensity - final_intensity))\r\n            muscle_target = upper_body_muscles\r\n        elif 0.3 <= elapsed_time <= 0.7:\r\n            initial_intensity_2 = 30\r\n            final_intensity_2 = 0\r\n            total_transition_time_2 = 0.7 - 0.3\r\n\r\n            intensity = initial_intensity_2 - ((elapsed_time - 0.3) / total_transition_time_2) * (\r\n                    initial_intensity_2 - final_intensity_2)\r\n            muscle_target = lower_body_muscles\r\n        else:\r\n            intensity = 0\r\n\r\n        canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n        # Break the loop if the duration has passed\r\n        if elapsed_time > duration:\r\n            canRun = False\r\n\r\n        time.sleep(0.1)  # run 10 times a second\r\n\r\ndef run_haptic_vest_interaction_hands():\r\n    muscles = \"Pectoral_R,Pectoral_L\", \"Arm_R,Arm_L\", \"Dorsal_R,Dorsal_L\"\r\n    hapticVestInteraction = HapticVestInteraction()\r\n\r\n    canRun = True\r\n\r\n    # Record the start time\r\n    start_time = time.time()\r\n\r\n    # Duration in seconds\r\n    duration = 0.5\r\n\r\n    random_muscle = random.choice(muscles)\r\n\r\n    while canRun:\r\n        # Calculate elapsed time\r\n        elapsed_time = time.time() - start_time\r\n\r\n        # Linearly scale intensity based on elapsed time\r\n        intensity = max(0, 40 - (elapsed_time / duration) * 40)\r\n\r\n        # Run the haptic sensation with updated intensity\r\n        canRun = hapticVestInteraction.runSensation(\r\n            \"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), random_muscle\r\n        )\r\n\r\n        # Break the loop if the duration has passed\r\n        if elapsed_time > duration:\r\n            canRun = False\r\n\r\n        time.sleep(0.1)  # run 10 times a second\r\n\r\nif weaponType in [\"sword\", \"axe\"]:\r\n    run_haptic_vest_interaction_slash()\r\nelse:\r\n    run_haptic_vest_interaction_hands()\r\n",
+			script_name: "damage-player_attack-script.py",
+			priority: 112,
+			event_name: "player_attack",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:wind_charge": {
-			priority: 150,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-wind_charge-script.py",
+			priority: 119,
+			event_name: "wind_charge",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:bad_respawn_point": {
-			priority: 50,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-bad_respawn_point-script.py",
+			priority: 98,
+			event_name: "bad_respawn_point",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:environment-in_dimension": {
-			priority: 20,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport math\r\n\r\n\r\n\r\nif (playerDimension == \"minecraft:the_nether\"):\r\n    muscle_target = \"Pectoral_R,Pectoral_L,Abdominal_R,Abdominal_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L,Lumbar_R,Lumbar_L\"\r\n\r\n    hapticVestInteraction = HapticVestInteraction()\r\n\r\n    canRun = True\r\n\r\n    # Record the start time\r\n    start_time = time.time()\r\n\r\n    # Duration in seconds\r\n    duration = 0.5\r\n\r\n    while canRun:\r\n        # Calculate elapsed time\r\n        elapsed_time = time.time() - start_time\r\n\r\n        # Calculate the result of cos wave\r\n        intensity = math.cos(playerAge / 20) * 4 + 20\r\n        # Run the haptic sensation with updated intensity\r\n        canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n        # Break the loop if the duration has passed\r\n        if elapsed_time > duration:\r\n            canRun = False\r\n\r\n        time.sleep(0.1)  # run 10 times a second\r\n",
+			script_name: "environment-in_dimension-script.py",
+			priority: 23,
+			event_name: "environment-in_dimension",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:dragon_breath": {
-			priority: 140,
+			script: "",
+			script_name: "damage-dragon_breath-script.py",
+			priority: 100,
+			event_name: "dragon_breath",
 			should_finish_event_first: true,
-			run_generic_event_instead: true
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:hot_floor": {
-			priority: 100,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-hot_floor-script.py",
+			priority: 104,
+			event_name: "hot_floor",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:in_wall": {
-			priority: 140,
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\n\r\n# This has regenerated\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 0.3\r\n\r\nmuscle_target = \"Pectoral_R,Pectoral_L,Abdominal_R,Abdominal_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L,Lumbar_R,Lumbar_L\"\r\n\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Linearly scale intensity based on elapsed time\r\n    intensity = max(20, 70 - (elapsed_time / duration) * 70)\r\n\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second\r\n\r\n",
+			script_name: "damage-in_wall-script.py",
+			priority: 105,
+			event_name: "in_wall",
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:generic": {
-			priority: 150,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-generic-script.py",
+			priority: 103,
+			event_name: "generic",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:wither_skull": {
-			priority: 130,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-wither_skull-script.py",
+			priority: 119,
+			event_name: "wither_skull",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:campfire": {
-			priority: 120,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-campfire-script.py",
+			priority: 99,
+			event_name: "campfire",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:cramming": {
-			priority: 140,
+			script: "",
+			script_name: "damage-cramming-script.py",
+			priority: 99,
+			event_name: "cramming",
 			should_finish_event_first: true,
-			run_generic_event_instead: true
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:stalagmite": {
-			priority: 140,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-stalagmite-script.py",
+			priority: 115,
+			event_name: "stalagmite",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:lava": {
-			priority: 140,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\n\r\n# This has regenerated\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 0.3\r\n\r\nmuscle_target = \"Pectoral_R,Pectoral_L,Abdominal_R,Abdominal_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L,Lumbar_R,Lumbar_L\"\r\n\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Linearly scale intensity based on elapsed time\r\n    intensity = max(20, 70 - (elapsed_time / duration) * 70)\r\n\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second\r\n",
+			script_name: "damage-lava-script.py",
+			priority: 108,
+			event_name: "lava",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:freeze": {
-			priority: 100,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport math\r\n\r\nmuscle_target = \"Pectoral_R,Pectoral_L,Abdominal_R,Abdominal_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L,Lumbar_R,Lumbar_L\"\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\nstart_time = time.time()\r\n\r\nduration = 1\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n\r\n    # make it so intensity goes up and down twice\r\n    intensity = 0\r\n    # Set the initial and final intensities and the total time for the transition\r\n    initial_intensity = 60\r\n    final_intensity = 20\r\n    total_transition_time = 0.2\r\n\r\n    # Check if the elapsed time is within the transition period\r\n    if 0 <= elapsed_time <= total_transition_time:\r\n        # Apply the linear interpolation formula\r\n        intensity = initial_intensity - ((elapsed_time / total_transition_time) * (initial_intensity - final_intensity))\r\n\r\n    elif 0.2 <= elapsed_time <= 0.5:\r\n        initial_intensity_2 = 20\r\n        final_intensity_2 = 0\r\n        total_transition_time_2 = 0.5 - 0.2\r\n\r\n        intensity = initial_intensity_2 - ((elapsed_time - 0.2) / total_transition_time_2) * (\r\n                initial_intensity_2 - final_intensity_2)\r\n    else:\r\n        intensity = 0\r\n\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "damage-freeze-script.py",
+			priority: 102,
+			event_name: "freeze",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:in_fire": {
-			priority: 130,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\n\r\n# This has regenerated\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 0.3\r\n\r\nmuscle_target = \"Pectoral_R,Pectoral_L,Abdominal_R,Abdominal_L,Arm_R,Arm_L,Dorsal_R,Dorsal_L,Lumbar_R,Lumbar_L\"\r\n\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Linearly scale intensity based on elapsed time\r\n    intensity = max(20, 70 - (elapsed_time / duration) * 70)\r\n\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second\r\n",
+			script_name: "damage-in_fire-script.py",
+			priority: 105,
+			event_name: "in_fire",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:spit": {
-			priority: 80,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-spit-script.py",
+			priority: 115,
+			event_name: "spit",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:cactus": {
-			priority: 80,
-			should_finish_event_first: false,
-			run_generic_event_instead: false
+			script: "import time\r\nimport random\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\n\r\nmuscle_target = random.choice(\r\n    [\"Pectoral_R\", \"Pectoral_L\", \"Abdominal_R\", \"Abdominal_L\", \"Arm_R\", \"Arm_L\", \"Dorsal_R\", \"Dorsal_L\", \"Lumbar_R\",\r\n     \"Lumbar_L\"])\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\n\r\ncanRun = True\r\nintensity = 100\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 1.2\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Linearly scale intensity based on elapsed time\r\n    intensity = max(0, 100 - (elapsed_time / duration) * 100)\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), muscle_target)\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "damage-cactus-script.py",
+			priority: 99,
+			event_name: "cactus",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:falling_block": {
-			priority: 1000,
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport random\r\n\r\n\r\nmuscles = \"Pectoral_R,Pectoral_L\", \"Arm_R,Arm_L\", \"Dorsal_R,Dorsal_L\"\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 0.9\r\n\r\nrandom_muscle = random.choice(muscles)\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Linearly scale intensity based on elapsed time\r\n    intensity = max(0, 70 - (elapsed_time / duration) * 70)\r\n\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\r\n        \"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), random_muscle\r\n    )\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "damage-falling_block-script.py",
+			priority: 102,
+			event_name: "falling_block",
 			should_finish_event_first: true,
-			run_generic_event_instead: true
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:thrown": {
-			priority: 100,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-thrown-script.py",
+			priority: 116,
+			event_name: "thrown",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:out_of_world": {
-			priority: 150,
+			script: "",
+			script_name: "damage-out_of_world-script.py",
+			priority: 111,
+			event_name: "out_of_world",
 			should_finish_event_first: true,
-			run_generic_event_instead: true
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:generic_event": {
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\n\r\n\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\nintensity = 50\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 2.0\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Linearly scale intensity based on elapsed time\r\n    intensity = max(0, 50 - (elapsed_time / duration) * 50)\r\n\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), \"Abdominal_R,Abdominal_L,Lumbar_R,Lumbar_L\")\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "generic_event-script.py",
 			priority: 1,
+			event_name: "generic_event",
 			should_finish_event_first: true,
-			run_generic_event_instead: false
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:falling_stalactite": {
-			priority: 140,
-			should_finish_event_first: false,
-			run_generic_event_instead: true
+			script: "",
+			script_name: "damage-falling_stalactite-script.py",
+			priority: 102,
+			event_name: "falling_stalactite",
+			should_finish_event_first: true,
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		},
 		"minecraft:fly_into_wall": {
-			priority: 140,
+			script: "import time\r\nfrom dev.sebastianb.owocraft.client.facade import HapticVestInteraction\r\nimport random\r\n\r\n\r\nmuscles = \"Pectoral_R,Pectoral_L\", \"Arm_R,Arm_L\", \"Dorsal_R,Dorsal_L\"\r\nhapticVestInteraction = HapticVestInteraction()\r\n\r\ncanRun = True\r\n\r\n# Record the start time\r\nstart_time = time.time()\r\n\r\n# Duration in seconds\r\nduration = 0.9\r\n\r\nrandom_muscle = random.choice(muscles)\r\n\r\nwhile canRun:\r\n    # Calculate elapsed time\r\n    elapsed_time = time.time() - start_time\r\n\r\n    # Linearly scale intensity based on elapsed time\r\n    intensity = max(0, 70 - (elapsed_time / duration) * 70)\r\n\r\n    # Run the haptic sensation with updated intensity\r\n    canRun = hapticVestInteraction.runSensation(\r\n        \"100,0.1,{:.2f},0,0,0,Impact\".format(intensity), random_muscle\r\n    )\r\n\r\n    # Break the loop if the duration has passed\r\n    if elapsed_time > duration:\r\n        canRun = False\r\n\r\n    time.sleep(0.1)  # run 10 times a second",
+			script_name: "damage-fly_into_wall-script.py",
+			priority: 102,
+			event_name: "fly_into_wall",
 			should_finish_event_first: true,
-			run_generic_event_instead: true
+			run_generic_event_instead: false,
+			mod_i_d: "minecraft"
 		}
 	},
 	ipAddresses: [
