@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class OwocraftClient {
@@ -90,13 +91,13 @@ public class OwocraftClient {
         sensationManager = API.getSensationManager();
 
         // load python core
-        Path jythonCorePath = Services.PLATFORM.getConfigDir().resolve("owocraft/jython_core");
+        Path jythonCorePath = Services.PLATFORM.getConfigDir().resolve("owocraft/jython_libs");
         Path modContainerPath = Services.PLATFORM.getModContainerPath("owocraft");
-        Path libSourcePath = modContainerPath.resolve("assets/owocraft/jython_core/Lib");
+        Path libSourcePath = modContainerPath.resolve("assets/owocraft/jython_libs/Core");
 
         try {
             Files.createDirectories(jythonCorePath);
-            Path libTargetPath = jythonCorePath.resolve("Lib");
+            Path libTargetPath = jythonCorePath.resolve("Core");
             copyDirectory(libSourcePath, libTargetPath);
             if (!Files.exists(libTargetPath)) {
                 // handle failure?
@@ -107,7 +108,18 @@ public class OwocraftClient {
 
         Properties props = new Properties();
         props.put("python.import.site", "false");
-        props.put("python.path", jythonCorePath.resolve("Lib").toAbsolutePath().toString());
+
+        String combinedPath = "";
+        try (Stream<Path> paths = Files.list(jythonCorePath)) {
+            combinedPath = paths
+                    .filter(Files::isDirectory)
+                    .map(path -> path.toAbsolutePath().toString())
+                    .collect(Collectors.joining(java.io.File.pathSeparator));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        props.put("python.path", combinedPath);
         PythonInterpreter.initialize(System.getProperties(), props, new String[0]);
 
         pythonRunnerManager = API.getPythonRunnerManager();
