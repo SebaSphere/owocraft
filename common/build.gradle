@@ -1,0 +1,68 @@
+plugins {
+    id 'multiloader-common'
+    id 'net.neoforged.moddev'
+}
+
+repositories {
+    maven {
+        url "https://maven2.bai.lol"
+        content {
+            includeGroup "lol.bai"
+        }
+    }
+    maven {
+        url "https://repo1.maven.org/maven2"
+        name "jython"
+    }
+    maven {
+        url = "https://maven.isxander.dev/releases"
+        name = "Xander Maven"
+    }
+    maven {
+        name = 'Fabric'
+        url = uri('https://maven.fabricmc.net')
+    }
+}
+
+neoForge {
+    neoFormVersion = neo_form_version
+    // Automatically enable AccessTransformers if the file exists
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
+    }
+}
+
+dependencies {
+    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
+    // fabric and neoforge both bundle mixinextras, so it is safe to use it in common
+    compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
+    annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
+    compileOnly "org.python:jython:${project.jython_version}"
+
+    compileOnly "net.fabricmc:fabric-loader:${fabric_loader_version}"
+
+    compileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}-neoforge"
+
+    compileOnly "lol.bai:badpackets:mojmap-${badpackets_version}"
+}
+
+configurations {
+    commonJava {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+    commonResources {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
+
+artifacts {
+    commonJava sourceSets.main.java.sourceDirectories.singleFile
+    commonResources sourceSets.main.resources.sourceDirectories.singleFile
+}

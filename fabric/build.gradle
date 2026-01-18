@@ -1,0 +1,73 @@
+plugins {
+    id 'multiloader-loader'
+    id 'fabric-loom'
+}
+
+repositories {
+    maven {
+        url "https://maven2.bai.lol"
+        content {
+            includeGroup "lol.bai"
+        }
+    }
+    maven {
+        url "https://repo1.maven.org/maven2"
+        name "jython"
+    }
+    maven {
+        url = "https://maven.isxander.dev/releases"
+        name = "Xander Maven"
+    }
+    maven {
+        name = "Terraformers"
+        url = "https://maven.terraformersmc.com/"
+    }
+    maven {
+        name = 'Fabric'
+        url = uri('https://maven.fabricmc.net')
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
+    }
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+    implementation "org.python:jython:${project.jython_version}"
+    include "org.python:jython:${project.jython_version}"
+
+    include "lol.bai:badpackets:fabric-${badpackets_version}"
+    modImplementation "lol.bai:badpackets:fabric-${badpackets_version}"
+
+    modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric"
+
+    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
+}
+
+loom {
+    def aw = project(':common').file("src/main/resources/${mod_id}.accesswidener")
+    if (aw.exists()) {
+        accessWidenerPath.set(aw)
+    }
+    mixin {
+        defaultRefmapName.set("${mod_id}.refmap.json")
+    }
+    runs {
+        client {
+            client()
+            setConfigName('Fabric Client')
+            ideConfigGenerated(true)
+            runDir('runs/client')
+        }
+        server {
+            server()
+            setConfigName('Fabric Server')
+            ideConfigGenerated(true)
+            runDir('runs/server')
+        }
+    }
+}

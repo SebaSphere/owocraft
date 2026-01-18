@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "owocraft",
+  "version": "${version}",
+  "name": "owocraft",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/owocraft/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "dev.sebastianb.owocraft.client.FabricOwocraftClient"
+    ],
+    "main": [
+      "dev.sebastianb.owocraft.FabricOwocraft"
+    ],
+    "modmenu": [
+      "dev.sebastianb.owocraft.integration.ModMenuIntegration"
+    ]
+  },
+  "accessWidener" : "owocraft.accesswidener",
+  "mixins": [
+    "owocraft.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
