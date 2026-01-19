@@ -2,17 +2,11 @@
   "required": true,
   "minVersion": "0.8",
   "package": "dev.sebastianb.owocraft.mixin",
+  "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "LevelMixin",
-    "ServerPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "client.ClientLevelMixin",
-    "client.ClientPlayerMixin",
-    "client.YACLScreenMixin"
-  ]
+  }
 }

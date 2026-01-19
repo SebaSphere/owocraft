@@ -39,6 +39,9 @@ pluginManagement {
         }
     }
 }
+
+rootProject.name = 'owocraft'
+
 include('common')
 include('fabric')
 include('neoforge')

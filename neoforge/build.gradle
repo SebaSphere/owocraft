@@ -3,6 +3,17 @@ plugins {
     id 'net.neoforged.moddev'
 }
 
+
+configurations.all {
+    resolutionStrategy {
+        force 'org.ow2.asm:asm:9.7'
+        force 'org.ow2.asm:asm-commons:9.7'
+        force 'org.ow2.asm:asm-util:9.7'
+        force 'org.ow2.asm:asm-tree:9.7'
+        force 'org.ow2.asm:asm-analysis:9.7'
+    }
+}
+
 repositories {
     maven {
         url "https://maven2.bai.lol"
@@ -33,18 +44,32 @@ repositories {
 
 dependencies {
     implementation "lol.bai:badpackets:forge-${badpackets_version}"
-    implementation "dev.isxander:yet-another-config-lib:${project.yacl_version}-neoforge"
 
-    implementation("org.python:jython-slim:${project.jython_version}") {
-        transitive = false
+    implementation("dev.isxander:yet-another-config-lib:${project.yacl_version}-neoforge") {
+        exclude group: 'org.ow2.asm'
     }
-    jarJar("org.python:jython:${project.jython_version}") {
-        transitive = false
-    }
+
+    implementation("org.python:jython-slim:${jython_version}")
     additionalRuntimeClasspath "org.python:jython-slim:${project.jython_version}"
 
-    implementation "lol.bai:badpackets:neo-${badpackets_version}"
+    jarJar("org.python:jython-slim:${project.jython_version}")
+    jarJar("com.github.jnr:jnr-posix:3.1.15")
+    jarJar("com.github.jnr:jnr-constants:0.10.3")
+    jarJar("com.github.jnr:jnr-ffi:2.2.12")
+    jarJar("org.antlr:antlr:3.5.2")
+    jarJar("org.antlr:antlr-runtime:3.5.2")
 
+    implementation "lol.bai:badpackets:neo-${badpackets_version}"
+    jarJar "lol.bai:badpackets:neo-${badpackets_version}"
+
+
+    // annotationProcessor group: 'org.spongepowered', name: 'mixin', version: '0.8.5', classifier: 'processor'
+}
+
+
+
+tasks.named('compileJava', JavaCompile) {
+    // options.compilerArgs << "-AoutRefMapFile=${project.mod_id}.refmap.json"
 }
 
 neoForge {
@@ -87,3 +112,11 @@ neoForge {
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+    neoForge {
+        runs {
+            client {
+                gameDirectory = file('runs/client')
+            }
+        }
+    }

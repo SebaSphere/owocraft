@@ -38,13 +38,14 @@ neoForge {
 }
 
 dependencies {
-    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     // fabric and neoforge both bundle mixinextras, so it is safe to use it in common
     compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
     annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
-    compileOnly "org.python:jython:${project.jython_version}"
+    compileOnly("org.python:jython-standalone:${jython_version}")
+    compileOnly "org.ow2.asm:asm:9.7"
+    compileOnly "org.ow2.asm:asm-commons:9.7"
 
-    compileOnly "net.fabricmc:fabric-loader:${fabric_loader_version}"
+//    compileOnly "net.fabricmc:fabric-loader:${fabric_loader_version}"
 
     compileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}-neoforge"
 
@@ -60,6 +61,9 @@ configurations {
         canBeResolved = false
         canBeConsumed = true
     }
+}
+
+tasks.named('compileJava', JavaCompile) {
 }
 
 artifacts {

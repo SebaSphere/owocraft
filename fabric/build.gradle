@@ -37,8 +37,24 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
-    implementation "org.python:jython:${project.jython_version}"
-    include "org.python:jython:${project.jython_version}"
+    implementation("org.python:jython-standalone:${jython_version}")
+    include("org.python:jython-standalone:${jython_version}")
+
+//    include "com.github.jnr:jnr-constants:0.9.12"
+//    include "com.github.jnr:jnr-posix:3.0.50"
+//    include "com.github.jnr:jnr-ffi:2.1.10"
+//    include "com.github.jnr:jffi:1.2.20"
+//    include "com.github.jnr:jnr-netdb:1.1.6"
+//    include "com.github.jnr:jnr-a64asm:1.0.0"
+//    include "com.github.jnr:jnr-x86asm:1.0.2"
+//    include "org.antlr:antlr:3.5.2"
+//    include "org.antlr:antlr-runtime:3.5.2"
+//    include "org.antlr:ST4:4.0.8"
+//    include "com.carrotsearch:java-sizeof:0.0.5"
+//    include "jline:jline:2.14.5"
+//    include "javax.servlet:javax.servlet-api:3.1.0"
+//    include "org.bouncycastle:bcpkix-jdk15on:1.62"
+//    include "org.bouncycastle:bcprov-jdk15on:1.62"
 
     include "lol.bai:badpackets:fabric-${badpackets_version}"
     modImplementation "lol.bai:badpackets:fabric-${badpackets_version}"

@@ -16,10 +16,6 @@ dependencies {
         capabilities {
             requireCapability "$group:$mod_id"
         }
-        def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
-        attributes {
-            attribute(loaderAttribute, 'common')
-        }
     }
     commonJava project(path: ':common', configuration: 'commonJava')
     commonResources project(path: ':common', configuration: 'commonResources')
@@ -28,6 +24,9 @@ dependencies {
 tasks.named('compileJava', JavaCompile) {
     dependsOn(configurations.commonJava)
     source(configurations.commonJava)
+    if (project.plugins.hasPlugin('net.neoforged.moddev')) {
+        options.compilerArgs << "-AoutRefMapFile=${project.mod_id}.refmap.json"
+    }
 }
 
 processResources {
@@ -40,9 +39,23 @@ tasks.named('javadoc', Javadoc).configure {
     source(configurations.commonJava)
 }
 
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from project(':common').sourceSets.main.output
+}
+
+tasks.withType(Jar).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    if (it.name == 'sourcesJar') {
+        from project(':common').sourceSets.main.allSource
+    } else {
+        from project(':common').sourceSets.main.output
+    }
+}
+
 tasks.named('sourcesJar', Jar) {
     dependsOn(configurations.commonJava)
-    from(configurations.commonJava)
+    // from(configurations.commonJava)
     dependsOn(configurations.commonResources)
-    from(configurations.commonResources)
+    // from(configurations.commonResources)
 }

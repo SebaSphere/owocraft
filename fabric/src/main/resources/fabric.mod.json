@@ -1,12 +1,14 @@
 {
   "schemaVersion": 1,
-  "id": "owocraft",
+  "id": "${mod_id}",
   "version": "${version}",
-  "name": "owocraft",
-  "description": "",
-  "authors": [],
+  "name": "${mod_name}",
+  "description": "${description}",
+  "authors": [
+    "${mod_author}"
+  ],
   "contact": {},
-  "license": "All-Rights-Reserved",
+  "license": "${license}",
   "icon": "assets/owocraft/icon.png",
   "environment": "*",
   "entrypoints": {
@@ -20,7 +22,6 @@
       "dev.sebastianb.owocraft.integration.ModMenuIntegration"
     ]
   },
-  "accessWidener" : "owocraft.accesswidener",
   "mixins": [
     "owocraft.mixins.json"
   ],
