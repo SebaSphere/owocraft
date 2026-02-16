@@ -70,7 +70,7 @@ repositories {
 
 dependencies {
 
-    compileOnly ("maven.modrinth:yacl:3.6.6+1.20.1-forge") {
+    modImplementation("maven.modrinth:yacl:${yacl_version}-forge") {
         exclude group: 'org.ow2.asm'
     }
 
@@ -83,6 +83,8 @@ dependencies {
     jarJar("com.github.jnr:jnr-ffi:2.2.12")
     jarJar("org.antlr:antlr:3.5.2")
     jarJar("org.antlr:antlr-runtime:3.5.2")
+    
+    
 
 
 
@@ -100,7 +102,7 @@ tasks.named('sourcesJar') {
 }
 
 task zipJythonCore(type: Zip) {
-    from 'assets/owocraft/jython_core/Lib'
+    from 'jython/Lib'
     archiveFileName = 'Lib.zip'
     destinationDirectory = file('assets/owocraft/jython_core')
 }
@@ -108,7 +110,6 @@ task zipJythonCore(type: Zip) {
 processResources {
     dependsOn zipJythonCore
     dependsOn ':common:zipJythonLibs'
-    exclude 'assets/owocraft/jython_core/Lib/**'
 }
 
 clean {

@@ -70,14 +70,13 @@ tasks.named('sourcesJar') {
 }
 
 task zipJythonLibs(type: Zip) {
-    from 'src/main/resources/assets/owocraft/jython_libs/Core'
+    from 'jython/Core'
     archiveFileName = 'Core.zip'
     destinationDirectory = file('src/main/resources/assets/owocraft/jython_libs')
 }
 
 processResources {
     dependsOn zipJythonLibs
-    exclude 'assets/owocraft/jython_libs/Core/**'
 }
 
 clean {
