@@ -100,21 +100,12 @@ public abstract class ClientPlayerMixin extends AbstractClientPlayer {
         }
         String playerDimension = this.level().dimension().location().toString();
         // check if player is in nether portal
-        if (this.portalProcess != null) {
-            if (this.portalProcess.isInsidePortalThisTick()) {
-
-                OwocraftClient.getPythonRunnerManager().runPythonScript(
-                        "minecraft", "event-in_portal",
-                        new PairedVariableArgument("playerAge", tickCount),
-                        new PairedVariableArgument("playerDimension", playerDimension)
-                );
-            } else {
-                OwocraftClient.getPythonRunnerManager().runPythonScript(
-                        "minecraft", "environment-in_dimension",
-                        new PairedVariableArgument("playerAge", tickCount),
-                        new PairedVariableArgument("playerDimension", playerDimension)
-                );
-            }
+        if (this.isInsidePortal) {
+            OwocraftClient.getPythonRunnerManager().runPythonScript(
+                    "minecraft", "event-in_portal",
+                    new PairedVariableArgument("playerAge", tickCount),
+                    new PairedVariableArgument("playerDimension", playerDimension)
+            );
         } else {
             OwocraftClient.getPythonRunnerManager().runPythonScript(
                     "minecraft", "environment-in_dimension",

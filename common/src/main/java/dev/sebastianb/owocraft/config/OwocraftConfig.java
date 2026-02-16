@@ -15,7 +15,7 @@ import java.util.List;
 public class OwocraftConfig {
 
     public static ConfigClassHandler<OwocraftConfig> HANDLER = ConfigClassHandler.createBuilder(OwocraftConfig.class)
-            .id(ResourceLocation.fromNamespaceAndPath("owocraft", "owocraft_config"))
+            .id(new ResourceLocation("owocraft", "owocraft_config"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(Services.PLATFORM.getConfigDir().resolve("owocraft_config.json5"))
                     .appendGsonBuilder(builder -> builder.setPrettyPrinting().serializeNulls()) // serialize nulls

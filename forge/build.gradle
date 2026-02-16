@@ -1,0 +1,166 @@
+plugins {
+    id 'multiloader-loader'
+    id 'net.neoforged.moddev.legacyforge'
+}
+
+
+configurations.all {
+    resolutionStrategy {
+        force 'org.ow2.asm:asm:9.7'
+        force 'org.ow2.asm:asm-commons:9.7'
+        force 'org.ow2.asm:asm-util:9.7'
+        force 'org.ow2.asm:asm-tree:9.7'
+        force 'org.ow2.asm:asm-analysis:9.7'
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(java_version)
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://maven2.bai.lol"
+        content {
+            includeGroup "lol.bai"
+        }
+    }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+    maven {
+        name = 'Kotlin for Forge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+    }
+    maven {
+        name = "Forge"
+        url = "https://maven.minecraftforge.net/"
+    }
+    maven {
+        name = "NeoForged"
+        url = "https://maven.neoforged.net/releases"
+    }
+    maven {
+        name = "NeoForged Shared"
+        url = "https://maven.neoforged.net/shared"
+    }
+    maven {
+        url "https://repo1.maven.org/maven2"
+        name "jython"
+    }
+    maven {
+        url = "https://maven.isxander.dev/releases"
+        name = "Xander Maven"
+    }
+    maven {
+        url "https://cursemaven.com"
+    }
+    maven {
+        name = "Terraformers"
+        url = "https://maven.terraformersmc.com/"
+    }
+}
+
+dependencies {
+
+    compileOnly ("maven.modrinth:yacl:3.6.6+1.20.1-forge") {
+        exclude group: 'org.ow2.asm'
+    }
+
+    implementation("org.python:jython-slim:${jython_version}")
+    runtimeOnly "org.python:jython-slim:${project.jython_version}"
+
+    jarJar("org.python:jython-slim:${project.jython_version}")
+    jarJar("com.github.jnr:jnr-posix:3.1.15")
+    jarJar("com.github.jnr:jnr-constants:0.10.3")
+    jarJar("com.github.jnr:jnr-ffi:2.2.12")
+    jarJar("org.antlr:antlr:3.5.2")
+    jarJar("org.antlr:antlr-runtime:3.5.2")
+
+
+
+    // annotationProcessor group: 'org.spongepowered', name: 'mixin', version: '0.8.5', classifier: 'processor'
+}
+
+
+
+tasks.named('compileJava', JavaCompile) {
+    // options.compilerArgs << "-AoutRefMapFile=${project.mod_id}.refmap.json"
+}
+
+tasks.named('sourcesJar') {
+    dependsOn ':common:zipJythonLibs'
+}
+
+task zipJythonCore(type: Zip) {
+    from 'assets/owocraft/jython_core/Lib'
+    archiveFileName = 'Lib.zip'
+    destinationDirectory = file('assets/owocraft/jython_core')
+}
+
+processResources {
+    dependsOn zipJythonCore
+    dependsOn ':common:zipJythonLibs'
+    exclude 'assets/owocraft/jython_core/Lib/**'
+}
+
+clean {
+    delete 'assets/owocraft/jython_core/Lib.zip'
+}
+
+legacyForge {
+    // Develop against MinecraftForge (the versions can be found at https://files.minecraftforge.net/)
+    version = "${minecraft_version}-${forge_version}"
+
+    parchment {
+        mappingsVersion = "2023.09.03"
+        minecraftVersion = "1.20.1"
+    }
+    // Validate AT files and raise errors when they have invalid targets
+    // This option is false by default, but turning it on is recommended
+    validateAccessTransformers = true
+
+    runs {
+        client {
+            client()
+        }
+        client2 {
+            client()
+
+            programArguments.addAll '--username', 'Dev2'
+        }
+        server {
+            server()
+        }
+        data {
+            data()
+            programArguments.addAll '--mod', "${mod_id}", '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        configureEach { run ->
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+
+            if (javaToolchains.launcherFor(java.toolchain).map { it.metadata.vendor }.getOrElse('').contains('JetBrains')) {
+                jvmArguments.addAll('-XX:+IgnoreUnrecognizedVMOptions', '-XX:+AllowEnhancedClassRedefinition')
+            }
+
+            jvmArgument '-Xmx4G'
+
+            // Recommended logging level for the console
+            systemProperty 'forge.logging.console.level', 'debug'
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}

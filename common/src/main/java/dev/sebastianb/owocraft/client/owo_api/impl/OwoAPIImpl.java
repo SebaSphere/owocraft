@@ -1,5 +1,6 @@
 package dev.sebastianb.owocraft.client.owo_api.impl;
 
+import dev.sebastianb.owocraft.client.owo_api.impl.bindings.JNIBindingManagerImpl;
 import dev.sebastianb.owocraft.client.owo_api.impl.bindings.PanamaBindingManagerImpl;
 import dev.sebastianb.owocraft.client.owo_api.impl.bindings.python.PythonRunnerManagerImpl;
 import dev.sebastianb.owocraft.client.owo_api.impl.owo.ConnectionStateManagerImpl;

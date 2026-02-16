@@ -15,9 +15,13 @@ import net.minecraft.world.damagesource.DamageTypes;
 import org.python.util.PythonInterpreter;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.Properties;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -77,6 +81,33 @@ public class OwocraftClient {
         }
     }
 
+    private static void extractZip(Path zipFile, Path target) throws IOException {
+        if (!Files.exists(zipFile)) {
+            return;
+        }
+        Files.createDirectories(target);
+        try (FileSystem zipFs = FileSystems.newFileSystem(zipFile, (ClassLoader) null)) {
+            Path root = zipFs.getPath("/");
+            Files.walk(root).forEach(path -> {
+                try {
+                    Path relativePath = root.relativize(path);
+                    Path destination = target.resolve(relativePath.toString());
+                    if (Files.isDirectory(path)) {
+                        if (!Files.exists(destination)) {
+                            Files.createDirectories(destination);
+                        }
+                    } else {
+                        if (!Files.exists(destination)) {
+                            Files.copy(path, destination);
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+    }
+
     public static void init() {
         // move scripts that should have default configs to config folder
         OwocraftDefaultScriptsLoader.register();
@@ -93,14 +124,33 @@ public class OwocraftClient {
         // load python core
         Path jythonCorePath = Services.PLATFORM.getConfigDir().resolve("owocraft/jython_libs");
         Path modContainerPath = Services.PLATFORM.getModContainerPath("owocraft");
+
+        // Common Core
         Path libSourcePath = modContainerPath.resolve("assets/owocraft/jython_libs/Core");
+        Path libZipSourcePath = modContainerPath.resolve("assets/owocraft/jython_libs/Core.zip");
 
         try {
             Files.createDirectories(jythonCorePath);
             Path libTargetPath = jythonCorePath.resolve("Core");
-            copyDirectory(libSourcePath, libTargetPath);
-            if (!Files.exists(libTargetPath)) {
-                // handle failure?
+            if (Files.exists(libZipSourcePath)) {
+                extractZip(libZipSourcePath, libTargetPath);
+            } else {
+                copyDirectory(libSourcePath, libTargetPath);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Forge Lib (jython_core)
+        Path forgeLibSourcePath = modContainerPath.resolve("assets/owocraft/jython_core/Lib");
+        Path forgeLibZipSourcePath = modContainerPath.resolve("assets/owocraft/jython_core/Lib.zip");
+
+        try {
+            Path forgeLibTargetPath = jythonCorePath.resolve("Lib");
+            if (Files.exists(forgeLibZipSourcePath)) {
+                extractZip(forgeLibZipSourcePath, forgeLibTargetPath);
+            } else if (Files.exists(forgeLibSourcePath)) {
+                copyDirectory(forgeLibSourcePath, forgeLibTargetPath);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,9 +1,9 @@
 package dev.sebastianb.owocraft.networking;
 
 import dev.sebastianb.owocraft.CommonOwocraft;
-import dev.sebastianb.owocraft.networking.common.s2c.PythonEventActivationS2CPacket;
 import dev.sebastianb.owocraft.networking.common.IPacket;
-import lol.bai.badpackets.api.play.PlayPackets;
+import dev.sebastianb.owocraft.networking.common.s2c.PythonEventActivationS2CPacket;
+import dev.sebastianb.owocraft.services.Services;
 
 import java.util.List;
 
@@ -16,12 +16,8 @@ public class OCPackets {
 
     public static void register() {
         PACKETS.forEach(iPacket -> {
-            PlayPackets.registerClientChannel(CommonOwocraft.id(iPacket.packetName()));
-
-            PlayPackets.registerClientReceiver(CommonOwocraft.id(iPacket.packetName()), iPacket.receiver());
-
+            Services.NETWORKING.registerS2CReceiver(CommonOwocraft.id(iPacket.packetName()), iPacket.receiver());
         });
-
     }
 
 

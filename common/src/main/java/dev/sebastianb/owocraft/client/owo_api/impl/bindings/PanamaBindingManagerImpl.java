@@ -2,7 +2,6 @@ package dev.sebastianb.owocraft.client.owo_api.impl.bindings;
 
 import dev.sebastianb.owocraft.CommonOwocraft;
 import dev.sebastianb.owocraft.client.owo_api.interfaces.bindings.PanamaBindingManager;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,8 +15,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.logging.Level;
 
-// https://github.com/apache/sis/blob/ac4ad3f36a17457e51dce01a35a5a2ad5645ac39/optional/src/org.apache.sis.storage.gdal/main/org/apache/sis/storage/panama/NativeFunctions.java#L134
-// not a bad class to look at
 public enum PanamaBindingManagerImpl implements PanamaBindingManager {
 
     INSTANCE;
@@ -96,11 +93,6 @@ public enum PanamaBindingManagerImpl implements PanamaBindingManager {
         }
     }
 
-    public static boolean isNull(final MemorySegment result) {
-        return (result == null) || result.address() == 0;
-    }
-
-
     @Override
     public String getStringFromMethod(String methodName) {
         try {
@@ -114,7 +106,7 @@ public enum PanamaBindingManagerImpl implements PanamaBindingManager {
                 try (Arena local = Arena.ofConfined()) {
                     result = (MemorySegment) methodHandle.invokeExact();
                 }
-                return isNull(result) ? null : result.reinterpret(Integer.MAX_VALUE).getString(0);
+                return result.address() == 0 ? null : result.reinterpret(Integer.MAX_VALUE).getString(0);
             } else {
                 throw new RuntimeException("Method " + methodName + " not found");
             }
@@ -123,7 +115,7 @@ public enum PanamaBindingManagerImpl implements PanamaBindingManager {
         }
     }
 
-    private static @NotNull MemorySegment getMemorySegmentFromString(String[] passedStrings, int x) {
+    private static MemorySegment getMemorySegmentFromString(String[] passedStrings, int x) {
         byte[] stringBytes1 = passedStrings[x].getBytes(StandardCharsets.UTF_8);
         ByteBuffer byteBuffer1 = ByteBuffer.allocateDirect(stringBytes1.length + 1);
         byteBuffer1.put(stringBytes1);

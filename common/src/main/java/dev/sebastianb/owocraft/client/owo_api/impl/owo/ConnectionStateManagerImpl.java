@@ -43,6 +43,8 @@ public enum ConnectionStateManagerImpl implements ConnectionStateManager {
     @Override
     public void setShouldAutoconnnect(boolean shouldAutoconnect) {
         this.shouldAutoconnect = shouldAutoconnect;
+        OwocraftClient.getPanamaBindingManager()
+                .getBooleanStateInvokeMultiplePassedStringMethod("shouldAutoconnect", String.valueOf(shouldAutoconnect));
     }
 
     @Override

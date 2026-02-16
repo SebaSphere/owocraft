@@ -15,7 +15,7 @@ public class CommonOwocraft {
 
 
     public static ResourceLocation id(String location) {
-        return ResourceLocation.fromNamespaceAndPath("owocraft", location);
+        return new ResourceLocation("owocraft", location);
     }
 
     public static void init() {

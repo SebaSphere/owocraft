@@ -2,8 +2,21 @@ plugins {
     id 'multiloader-loader'
     id 'fabric-loom'
 }
+println "DEBUG: Minecraft: ${minecraft_version}, ParchmentMC: ${parchment_minecraft}, ParchmentVer: ${parchment_version}"
 
 repositories {
+    maven {
+        name = "ParchmentMC"
+        url = "https://maven.parchmentmc.org"
+    }
+    maven {
+        name = "Sonatype Snapshots"
+        url = "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+    maven {
+        name = "Minecraft"
+        url = "https://libraries.minecraft.net/"
+    }
     maven {
         url "https://maven2.bai.lol"
         content {
@@ -56,10 +69,8 @@ dependencies {
 //    include "org.bouncycastle:bcpkix-jdk15on:1.62"
 //    include "org.bouncycastle:bcprov-jdk15on:1.62"
 
-    include "lol.bai:badpackets:fabric-${badpackets_version}"
-    modImplementation "lol.bai:badpackets:fabric-${badpackets_version}"
 
-    modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric"
+    modImplementation "maven.modrinth:yacl:${project.yacl_version}-fabric"
 
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 }

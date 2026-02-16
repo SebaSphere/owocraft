@@ -1,6 +1,6 @@
 plugins {
     id 'multiloader-common'
-    id 'net.neoforged.moddev'
+    id 'net.neoforged.moddev.legacyforge'
 }
 
 repositories {
@@ -9,6 +9,9 @@ repositories {
         content {
             includeGroup "lol.bai"
         }
+    }
+    maven {
+        url = "https://api.modrinth.com/maven"
     }
     maven {
         url "https://repo1.maven.org/maven2"
@@ -24,12 +27,10 @@ repositories {
     }
 }
 
-neoForge {
-    neoFormVersion = neo_form_version
-    // Automatically enable AccessTransformers if the file exists
-    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
-    if (at.exists()) {
-        accessTransformers.from(at.absolutePath)
+legacyForge {
+    mcpVersion = minecraft_version
+    if (file("src/main/resources/META-INF/accesstransformer.cfg").exists()) {
+        accessTransformers = ["src/main/resources/META-INF/accesstransformer.cfg"]
     }
     parchment {
         minecraftVersion = parchment_minecraft
@@ -38,18 +39,16 @@ neoForge {
 }
 
 dependencies {
-    // fabric and neoforge both bundle mixinextras, so it is safe to use it in common
-    compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
-    annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
-    compileOnly("org.python:jython-standalone:${jython_version}")
+    compileOnly "io.github.llamalad7:mixinextras-common:0.3.5"
+    annotationProcessor "io.github.llamalad7:mixinextras-common:0.3.5"
+    compileOnly "org.python:jython-standalone:${jython_version}"
     compileOnly "org.ow2.asm:asm:9.7"
     compileOnly "org.ow2.asm:asm-commons:9.7"
 
-//    compileOnly "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    compileOnly "org.jetbrains:annotations:24.1.0"
 
-    compileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}-neoforge"
+    compileOnly "maven.modrinth:yacl:${project.yacl_version}-forge"
 
-    compileOnly "lol.bai:badpackets:mojmap-${badpackets_version}"
 }
 
 configurations {
@@ -64,6 +63,25 @@ configurations {
 }
 
 tasks.named('compileJava', JavaCompile) {
+}
+
+tasks.named('sourcesJar') {
+    dependsOn 'zipJythonLibs'
+}
+
+task zipJythonLibs(type: Zip) {
+    from 'src/main/resources/assets/owocraft/jython_libs/Core'
+    archiveFileName = 'Core.zip'
+    destinationDirectory = file('src/main/resources/assets/owocraft/jython_libs')
+}
+
+processResources {
+    dependsOn zipJythonLibs
+    exclude 'assets/owocraft/jython_libs/Core/**'
+}
+
+clean {
+    delete 'src/main/resources/assets/owocraft/jython_libs/Core.zip'
 }
 
 artifacts {

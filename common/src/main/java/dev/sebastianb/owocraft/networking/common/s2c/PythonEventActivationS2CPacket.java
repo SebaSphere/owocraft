@@ -4,19 +4,17 @@ import dev.sebastianb.owocraft.CommonOwocraft;
 import dev.sebastianb.owocraft.client.OwocraftClient;
 import dev.sebastianb.owocraft.client.owo_api.impl.bindings.python.PairedVariableArgument;
 import dev.sebastianb.owocraft.networking.common.IPacket;
+import dev.sebastianb.owocraft.services.Services;
 import io.netty.buffer.Unpooled;
-import lol.bai.badpackets.api.PacketReceiver;
-import lol.bai.badpackets.api.PacketSender;
-import lol.bai.badpackets.api.play.ClientPlayContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.SwordItem;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class PythonEventActivationS2CPacket implements IPacket {
 
@@ -27,15 +25,15 @@ public class PythonEventActivationS2CPacket implements IPacket {
     }
 
     @Override
-    public PacketReceiver<ClientPlayContext, FriendlyByteBuf> receiver() {
-        return (ClientPlayContext handler, FriendlyByteBuf buf) -> {
+    public Consumer<FriendlyByteBuf> receiver() {
+        return (FriendlyByteBuf buf) -> {
             activatePythonEvent(
-                    handler.client(), handler, buf
+                    Minecraft.getInstance(), buf
             );
         };
     }
 
-    private static void activatePythonEvent(@NotNull Minecraft client, @NotNull ClientPlayContext handler, @NotNull FriendlyByteBuf buf) {
+    private static void activatePythonEvent(Minecraft client, FriendlyByteBuf buf) {
         String damageSourceKey = buf.readUtf();
         String damageEntity = buf.readUtf();
         String weaponType = buf.readUtf();
@@ -57,7 +55,7 @@ public class PythonEventActivationS2CPacket implements IPacket {
     }
 
     public static void sendPacketToServer(DamageSource damageSource, ServerPlayer serverPlayer, float damage, boolean isEnderpearl) {
-        String damageSourceKey = damageSource.typeHolder().getRegisteredName();
+        String damageSourceKey = damageSource.getMsgId();
 
 
 
@@ -73,10 +71,10 @@ public class PythonEventActivationS2CPacket implements IPacket {
         }
         buf.writeUtf(damageEntity);
 
-        if (damageSource.getWeaponItem() != null) {
-            if (damageSource.getWeaponItem().getItem() instanceof SwordItem) {
+        if (damageSource.getDirectEntity() instanceof net.minecraft.world.entity.LivingEntity living) {
+            if (living.getMainHandItem().getItem() instanceof SwordItem) {
                 buf.writeUtf("sword");
-            } else if (damageSource.getWeaponItem().getItem() instanceof AxeItem) {
+            } else if (living.getMainHandItem().getItem() instanceof AxeItem) {
                 buf.writeUtf("axe");
             } else {
                 buf.writeUtf("hand");
@@ -87,9 +85,7 @@ public class PythonEventActivationS2CPacket implements IPacket {
         buf.writeFloat(damage);
 
 
-
-
-        PacketSender.s2c(serverPlayer).send(CommonOwocraft.id("python_event_activation"), buf);
+        Services.NETWORKING.sendS2CPacket(serverPlayer, CommonOwocraft.id("python_event_activation"), buf);
     }
 
 
