@@ -105,6 +105,8 @@ processResources {
             "forge_loader_version_range"   : forge_loader_version_range,
             "neoforge_version"             : neoforge_version,
             "neoforge_loader_version_range": neoforge_loader_version_range,
+            'owo_version'                  : owo_version,
+            'yacl_version'                 : yacl_version,
             'credits'                      : credits,
             'java_version'                 : java_version
     ]

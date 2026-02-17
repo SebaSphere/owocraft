@@ -1,15 +1,12 @@
-package dev.sebastianb.owocraft.mixin.client;
+package dev.sebastianb.owocraft.mixin;
 
-import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.sebastianb.owocraft.utils.HapticsIconWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

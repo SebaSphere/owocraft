@@ -31,7 +31,7 @@ dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
-    implementation "maven.modrinth:yacl:3.6.6+1.20.1-forge"
+    modImplementation "maven.modrinth:yacl:3.6.6+1.20.1-forge"
 
     implementation "org.python:jython-standalone:2.7.4"
 }

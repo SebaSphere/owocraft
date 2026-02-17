@@ -13,7 +13,16 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
+    maven {
+        url = "https://maven.quiltmc.org/repository/release/"
+    }
 }
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(java_version)
+}
+
+
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
@@ -25,7 +34,16 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":common")
-    implementation "maven.modrinth:yacl:3.6.6+1.20.1-fabric"
+
+    implementation "org.python:jython-standalone:2.7.4"
+    include( "org.python:jython-standalone:2.7.4")
+
+    // Source: https://mvnrepository.com/artifact/org.quiltmc.parsers/gson
+    implementation 'org.quiltmc.parsers:gson:0.2.1'
+    include 'org.quiltmc.parsers:gson:0.2.1'
+
+    modImplementation "maven.modrinth:yacl:${yacl_version}-fabric"
+    modImplementation "maven.modrinth:modmenu:${modmenu_version}"
 }
 
 loom {

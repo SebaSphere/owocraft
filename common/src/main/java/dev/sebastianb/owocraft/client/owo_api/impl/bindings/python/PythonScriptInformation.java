@@ -6,6 +6,7 @@ public class PythonScriptInformation {
 
     public String script;
     public String scriptName;
+    
     @SerialEntry
     public int priority = 1;
     @SerialEntry

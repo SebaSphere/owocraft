@@ -68,7 +68,6 @@ dependencies {
 
     modImplementation "maven.modrinth:yacl:3.6.6+1.20.1-forge"
 
-
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 }
 
