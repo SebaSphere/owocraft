@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${description}",
+  "authors": [
+    "${mod_author}"
+  ],
+  "contact": {},
+  "license": "${license}",
+  "icon": "assets/owocraft/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "dev.sebastianb.owocraft.client.FabricOwocraftClient"
+    ],
+    "main": [
+      "dev.sebastianb.owocraft.FabricOwocraft"
+    ],
+    "modmenu": [
+      "dev.sebastianb.owocraft.integration.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "owocraft.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": "*",
+    "minecraft": "~1.20.1",
+    "owo": ">=${owo_version}",
+    "yet_another_config_lib_v3": ">=${yacl_version}"
+  }
+}
